@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayout;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
@@ -18,14 +19,13 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
-    private GridLayout grandparentLayout;
-    private GridLayout selectedLine;
-    private TextView selectedText;
-    private String selectedTag;
+    GridLayout grandparentLayout;
+    GridLayout selectedLine;
+    Currency selectedCurrency;
+    TextView selectedText;
+    String selectedTag;
 
-    //private ArrayList<String> setCurrencies;
-
-    private HashMap<String, Float> currencyRates;
+    private ArrayList<Currency> setCurrencies;
 
     private boolean newVal = true;
 
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
             selectedLine = (GridLayout) view.getParent();
             selectedText = (TextView) view;
             selectedTag = view.getTag().toString();
-            //selectedCurrency = selectedLine.getTag().toString();
+            selectedCurrency = setCurrencies.get(Integer.parseInt(view.getTag().toString()));
 
             for(int i = 0; i < 4; i++) {
                 GridLayout parentLayout = (GridLayout) grandparentLayout.getChildAt(i);
@@ -89,15 +89,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        float numVal = currencyRates.get(selectedLine.getChildAt(0).getTag().toString())
-                * Float.parseFloat(selectedText.getText().toString());
+        float numVal = selectedCurrency.getExchangeRate() * Float.parseFloat(selectedText.getText().toString());
 
-        for(int i = 0; i < 4; i++) {
+        for(int i = 0; i < setCurrencies.size(); i++) {
             GridLayout parentLayout = (GridLayout) grandparentLayout.getChildAt(i);
-            if(parentLayout != selectedLine && parentLayout.getChildAt(0).getTag() != null) {
+            if(parentLayout != selectedLine && (!(setCurrencies.get(i) instanceof EmptyLine))) {
                 TextView textView = (TextView) parentLayout.getChildAt(1);
                 textView.setText(String.valueOf(formatter.format(numVal
-                        / currencyRates.get(parentLayout.getChildAt(0).getTag().toString()))));
+                        / setCurrencies.get(i).getExchangeRate())));
             }
         }
     }
@@ -117,25 +116,24 @@ public class MainActivity extends AppCompatActivity {
         selectedLine.setBackgroundColor(Color.DKGRAY);
         selectedText.setTextColor(Color.WHITE);
 
-        currencyRates = new HashMap<>();
-        currencyRates.put("USD", 1f);
-        currencyRates.put("FFGIL", 0.066666f);
-        currencyRates.put("SWIC", 1.111111f);
-        currencyRates.put("ZHR", 0.454545f);
+        setCurrencies = new ArrayList<>(Arrays.asList(new USD(), new FFGIL(), new EmptyLine(), new ZHR()));
 
-        //setCurrencies = new ArrayList<String>(Arrays.asList("USD", "FF"));
+        ImageView icon = findViewById(R.id.icon0);
+        icon.setImageResource(setCurrencies.get(0).getIconId());
 
+        icon = findViewById(R.id.icon1);
+        icon.setImageResource(setCurrencies.get(1).getIconId());
 
-        selectedLine.getChildAt(0).setTag("USD");
+        icon = findViewById(R.id.icon3);
+        icon.setImageResource(setCurrencies.get(3).getIconId());
 
-        GridLayout line = findViewById(R.id.line1);
-        line.getChildAt(0).setTag("FFGIL");
+        selectedCurrency = setCurrencies.get(0);
 
-        line = findViewById(R.id.line2);
-        line.getChildAt(0).setTag("SWIC");
-
-        line = findViewById(R.id.line3);
-        line.getChildAt(0).setTag("ZHR");
+        //currencyRates = new HashMap<>();
+        //currencyRates.put("USD", 1f);
+        //currencyRates.put("FFGIL", 0.066666f);
+        //currencyRates.put("SWIC", 1.111111f);
+        //currencyRates.put("ZHR", 0.454545f);
 
         Log.i("text", selectedText.getText().toString());
 

@@ -1,0 +1,9 @@
+package com.adamdoq.fcconvert;
+
+public class FFGIL extends Currency {
+
+    public FFGIL() {
+        exchangeRate = 0.066666f;
+        iconId = R.drawable.barret_icon;
+    }
+}
