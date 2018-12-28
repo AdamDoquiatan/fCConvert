@@ -22,6 +22,37 @@
         app:rowCount="4">
 
         <android.support.v7.widget.GridLayout
+            android:id="@+id/line0"
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            app:columnCount="2"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill"
+            app:layout_rowWeight="1">
+
+            <ImageView
+                android:id="@+id/cur0"
+                android:layout_width="113dp"
+                android:layout_height="match_parent"
+                app:srcCompat="@android:color/holo_blue_bright" />
+
+            <TextView
+                android:id="@+id/lineText0"
+                android:layout_width="163dp"
+                android:layout_height="match_parent"
+                android:gravity="right|center_vertical"
+                android:onClick="selectLine"
+                android:paddingRight="10dp"
+                android:tag="0"
+                android:text="0"
+                android:textColor="@android:color/black"
+                android:textSize="30sp"
+                app:layout_columnWeight="1"
+                app:layout_rowWeight="1" />
+
+        </android.support.v7.widget.GridLayout>
+
+        <android.support.v7.widget.GridLayout
             android:id="@+id/line1"
             android:layout_width="match_parent"
             android:layout_height="58dp"
@@ -34,14 +65,18 @@
                 android:id="@+id/cur1"
                 android:layout_width="113dp"
                 android:layout_height="match_parent"
-                app:srcCompat="@android:color/holo_blue_bright" />
+                app:srcCompat="@android:color/holo_green_light" />
 
             <TextView
-                android:id="@+id/val1"
+                android:id="@+id/lineText1"
                 android:layout_width="163dp"
                 android:layout_height="match_parent"
                 android:gravity="right|center_vertical"
-                android:text="TextView"
+                android:onClick="selectLine"
+                android:paddingRight="10dp"
+                android:tag="1"
+                android:text="0"
+                android:textColor="@android:color/black"
                 android:textSize="30sp"
                 app:layout_columnWeight="1"
                 app:layout_rowWeight="1" />
@@ -61,14 +96,18 @@
                 android:id="@+id/cur2"
                 android:layout_width="113dp"
                 android:layout_height="match_parent"
-                app:srcCompat="@android:color/holo_green_light" />
+                app:srcCompat="@android:color/holo_purple" />
 
             <TextView
-                android:id="@+id/val2"
+                android:id="@+id/lineText2"
                 android:layout_width="163dp"
                 android:layout_height="match_parent"
                 android:gravity="right|center_vertical"
-                android:text="TextView"
+                android:onClick="selectLine"
+                android:paddingRight="10dp"
+                android:tag="2"
+                android:text="0"
+                android:textColor="@android:color/black"
                 android:textSize="30sp"
                 app:layout_columnWeight="1"
                 app:layout_rowWeight="1" />
@@ -88,41 +127,18 @@
                 android:id="@+id/cur3"
                 android:layout_width="113dp"
                 android:layout_height="match_parent"
-                app:srcCompat="@android:color/holo_purple" />
-
-            <TextView
-                android:id="@+id/val3"
-                android:layout_width="163dp"
-                android:layout_height="match_parent"
-                android:gravity="right|center_vertical"
-                android:text="TextView"
-                android:textSize="30sp"
-                app:layout_columnWeight="1"
-                app:layout_rowWeight="1" />
-
-        </android.support.v7.widget.GridLayout>
-
-        <android.support.v7.widget.GridLayout
-            android:id="@+id/line4"
-            android:layout_width="match_parent"
-            android:layout_height="58dp"
-            app:columnCount="2"
-            app:layout_columnWeight="1"
-            app:layout_gravity="fill"
-            app:layout_rowWeight="1">
-
-            <ImageView
-                android:id="@+id/cur4"
-                android:layout_width="113dp"
-                android:layout_height="match_parent"
                 app:srcCompat="@android:color/holo_red_light" />
 
             <TextView
-                android:id="@+id/val4"
+                android:id="@+id/lineText3"
                 android:layout_width="163dp"
                 android:layout_height="match_parent"
                 android:gravity="right|center_vertical"
-                android:text="TextView"
+                android:onClick="selectLine"
+                android:paddingRight="10dp"
+                android:tag="3"
+                android:text="0"
+                android:textColor="@android:color/black"
                 android:textSize="30sp"
                 app:layout_columnWeight="1"
                 app:layout_rowWeight="1" />
@@ -131,6 +147,7 @@
     </android.support.v7.widget.GridLayout>
 
     <android.support.v7.widget.GridLayout
+        android:id="@+id/gridLayout2"
         android:layout_width="300dp"
         android:layout_height="253dp"
         android:layout_marginStart="80dp"
@@ -149,10 +166,12 @@
             android:id="@+id/button7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="enterVal"
             android:padding="0dp"
             android:text="7"
             android:textSize="30sp"
             android:textStyle="bold"
+            android:tag="7"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1" />
 
@@ -160,10 +179,12 @@
             android:id="@+id/button8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="enterVal"
             android:padding="0dp"
             android:text="8"
             android:textSize="30sp"
             android:textStyle="bold"
+            android:tag="8"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1" />
 
@@ -171,10 +192,12 @@
             android:id="@+id/button9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="enterVal"
             android:padding="0dp"
             android:text="9"
             android:textSize="30sp"
             android:textStyle="bold"
+            android:tag="9"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1" />
 
@@ -182,10 +205,12 @@
             android:id="@+id/button4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="enterVal"
             android:padding="0dp"
             android:text="4"
             android:textSize="30sp"
             android:textStyle="bold"
+            android:tag="4"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1" />
 
@@ -193,10 +218,12 @@
             android:id="@+id/button5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="enterVal"
             android:padding="0dp"
             android:text="5"
             android:textSize="30sp"
             android:textStyle="bold"
+            android:tag="5"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1" />
 
@@ -204,10 +231,12 @@
             android:id="@+id/button6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="enterVal"
             android:padding="0dp"
             android:text="6"
             android:textSize="30sp"
             android:textStyle="bold"
+            android:tag="6"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1" />
 
@@ -215,10 +244,12 @@
             android:id="@+id/button3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="enterVal"
             android:padding="0dp"
             android:text="3"
             android:textSize="30sp"
             android:textStyle="bold"
+            android:tag="3"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1" />
 
@@ -226,10 +257,12 @@
             android:id="@+id/button2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="enterVal"
             android:padding="0dp"
             android:text="2"
             android:textSize="30sp"
             android:textStyle="bold"
+            android:tag="2"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1" />
 
@@ -237,10 +270,12 @@
             android:id="@+id/button1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="enterVal"
             android:padding="0dp"
             android:text="1"
             android:textSize="30sp"
             android:textStyle="bold"
+            android:tag="1"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1" />
 
@@ -248,10 +283,12 @@
             android:id="@+id/button0"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="enterVal"
             android:padding="0dp"
             android:text="0"
             android:textSize="30sp"
             android:textStyle="bold"
+            android:tag="0"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1" />
 
@@ -259,10 +296,12 @@
             android:id="@+id/buttonDec"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="enterVal"
             android:padding="0dp"
             android:text="."
             android:textSize="30sp"
             android:textStyle="bold"
+            android:tag="dec"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1" />
 
@@ -270,10 +309,12 @@
             android:id="@+id/buttonBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="enterVal"
             android:padding="0dp"
-            android:text="<="
+            android:text="back"
             android:textSize="30sp"
             android:textStyle="bold"
+            android:tag="back"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1" />
 
