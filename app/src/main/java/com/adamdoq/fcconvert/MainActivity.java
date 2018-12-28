@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
     private GridLayout selectedLine;
     private TextView selectedText;
     private String selectedTag;
-    private String selectedCurrency;
 
     //private ArrayList<String> setCurrencies;
 
@@ -56,10 +55,13 @@ public class MainActivity extends AppCompatActivity {
         DecimalFormat formatter = new DecimalFormat();
         formatter.applyPattern("0.##");
 
-
-
         if(view.getTag().toString().equals("back")){
-            if(selectedText.getText().toString().length() < 2 || selectedText.getText().toString().equals("0.0") || newVal == true) {
+            if(selectedText.getText().toString().length() < 2
+                    || selectedText.getText().toString().equals("0.0")
+                    || newVal == true) {
+                if(newVal == true) {
+                    newVal = false;
+                }
                 selectedText.setText("" + 0);
             } else {
                 selectedText.setText(selectedText.getText().toString()
@@ -86,14 +88,16 @@ public class MainActivity extends AppCompatActivity {
             selectedText.setText("0.0");
         }
 
-        float numVal = Float.parseFloat(selectedText.getText().toString());
+
+        float numVal = currencyRates.get(selectedLine.getChildAt(0).getTag().toString())
+                * Float.parseFloat(selectedText.getText().toString());
 
         for(int i = 0; i < 4; i++) {
             GridLayout parentLayout = (GridLayout) grandparentLayout.getChildAt(i);
             if(parentLayout != selectedLine && parentLayout.getChildAt(0).getTag() != null) {
                 TextView textView = (TextView) parentLayout.getChildAt(1);
                 textView.setText(String.valueOf(formatter.format(numVal
-                        * currencyRates.get(parentLayout.getChildAt(0).getTag().toString()))));
+                        / currencyRates.get(parentLayout.getChildAt(0).getTag().toString()))));
             }
         }
     }
@@ -115,19 +119,23 @@ public class MainActivity extends AppCompatActivity {
 
         currencyRates = new HashMap<>();
         currencyRates.put("USD", 1f);
-        currencyRates.put("FF", 15f);
+        currencyRates.put("FFGIL", 0.066666f);
+        currencyRates.put("SWIC", 1.111111f);
+        currencyRates.put("ZHR", 0.454545f);
 
         //setCurrencies = new ArrayList<String>(Arrays.asList("USD", "FF"));
 
 
         selectedLine.getChildAt(0).setTag("USD");
 
-        GridLayout line1 = findViewById(R.id.line1);
-        line1.getChildAt(0).setTag("FF");
+        GridLayout line = findViewById(R.id.line1);
+        line.getChildAt(0).setTag("FFGIL");
 
-        selectedCurrency = "USD";
+        line = findViewById(R.id.line2);
+        line.getChildAt(0).setTag("SWIC");
 
-
+        line = findViewById(R.id.line3);
+        line.getChildAt(0).setTag("ZHR");
 
         Log.i("text", selectedText.getText().toString());
 
