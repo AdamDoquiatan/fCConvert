@@ -56,8 +56,10 @@ public class MainActivity extends AppCompatActivity {
         DecimalFormat formatter = new DecimalFormat();
         formatter.applyPattern("0.##");
 
+
+
         if(view.getTag().toString().equals("back")){
-            if(selectedText.getText().toString().length() < 2 || newVal == true) {
+            if(selectedText.getText().toString().length() < 2 || selectedText.getText().toString().equals("0.0") || newVal == true) {
                 selectedText.setText("" + 0);
             } else {
                 selectedText.setText(selectedText.getText().toString()
@@ -76,7 +78,11 @@ public class MainActivity extends AppCompatActivity {
             selectedText.append("" + view.getTag().toString());
         }
 
-        if(selectedText.getText().toString().equals(".")) {
+        if(selectedText.getText().toString().length() - selectedText.getText().toString().replaceAll("\\.", "").length() > 1) {
+            selectedText.setText(selectedText.getText().toString().substring(0, selectedText.getText().toString().length() - 1));
+        }
+
+        if(selectedText.getText().toString().equals(".") || selectedText.getText().toString().equals("0.")) {
             selectedText.setText("0.0");
         }
 
@@ -86,7 +92,8 @@ public class MainActivity extends AppCompatActivity {
             GridLayout parentLayout = (GridLayout) grandparentLayout.getChildAt(i);
             if(parentLayout != selectedLine && parentLayout.getChildAt(0).getTag() != null) {
                 TextView textView = (TextView) parentLayout.getChildAt(1);
-                textView.setText(String.valueOf(formatter.format(numVal * currencyRates.get(parentLayout.getChildAt(0).getTag().toString()))));
+                textView.setText(String.valueOf(formatter.format(numVal
+                        * currencyRates.get(parentLayout.getChildAt(0).getTag().toString()))));
             }
         }
     }
