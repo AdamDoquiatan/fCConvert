@@ -302,7 +302,7 @@
             android:text="."
             android:textSize="30sp"
             android:textStyle="bold"
-            android:tag="dec"
+            android:tag="."
             app:layout_columnWeight="1"
             app:layout_rowWeight="1" />
 

@@ -18,6 +18,7 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
+    private GridLayout grandparentLayout;
     private GridLayout selectedLine;
     private TextView selectedText;
     private String selectedTag;
@@ -27,14 +28,15 @@ public class MainActivity extends AppCompatActivity {
 
     private HashMap<String, Float> currencyRates;
 
+    private boolean newVal = true;
+
     public void selectLine(View view) {
         if(!view.getTag().toString().equals(selectedTag)) {
+            newVal = true;
             selectedLine = (GridLayout) view.getParent();
             selectedText = (TextView) view;
             selectedTag = view.getTag().toString();
             //selectedCurrency = selectedLine.getTag().toString();
-
-            GridLayout grandparentLayout = (GridLayout) view.getParent().getParent();
 
             for(int i = 0; i < 4; i++) {
                 GridLayout parentLayout = (GridLayout) grandparentLayout.getChildAt(i);
@@ -51,35 +53,42 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void enterVal(View view) {
-        //DecimalFormat formatter = new DecimalFormat();
-        //formatter.applyPattern("0.##");
+        DecimalFormat formatter = new DecimalFormat();
+        formatter.applyPattern("0.##");
 
-        if(selectedText.getText().toString().equals("0")) {
-            selectedText.setText("" + view.getTag().toString());
-        } else if(view.getTag().toString().equals("dec")){
-            selectedText.append(".");
-        } else if(view.getTag().toString().equals("back") && Float.parseFloat(selectedText.getText().toString()) != 0){
-            selectedText.setText(selectedText.getText().toString()
-                    .substring(0, selectedText.getText().toString().length() - 1));
-            if(selectedText.getText().toString().length() == 0 || Float.parseFloat(selectedText.getText().toString()) == 0) {
+        if(view.getTag().toString().equals("back")){
+            if(selectedText.getText().toString().length() < 2 || newVal == true) {
                 selectedText.setText("" + 0);
+            } else {
+                selectedText.setText(selectedText.getText().toString()
+                        .substring(0, selectedText.getText().toString().length() - 1));
+            }
+        } else if(newVal || selectedText.getText().toString().equals("0")) {
+            selectedText.setText("" + view.getTag().toString());
+            newVal = false;
+        } else if(selectedText.getText().toString().equals("0.0")) {
+            if(view.getTag().toString().equals("0")) {
+                selectedText.append("0");
+            } else {
+                selectedText.setText("0." + view.getTag().toString());
             }
         } else {
             selectedText.append("" + view.getTag().toString());
         }
 
+        if(selectedText.getText().toString().equals(".")) {
+            selectedText.setText("0.0");
+        }
+
         float numVal = Float.parseFloat(selectedText.getText().toString());
 
-        GridLayout grandparentLayout = findViewById(R.id.convLines);
         for(int i = 0; i < 4; i++) {
             GridLayout parentLayout = (GridLayout) grandparentLayout.getChildAt(i);
             if(parentLayout != selectedLine && parentLayout.getChildAt(0).getTag() != null) {
                 TextView textView = (TextView) parentLayout.getChildAt(1);
-                textView.setText(String.valueOf(numVal * currencyRates.get(parentLayout.getChildAt(0).getTag().toString())));
+                textView.setText(String.valueOf(formatter.format(numVal * currencyRates.get(parentLayout.getChildAt(0).getTag().toString()))));
             }
         }
-
-
     }
 
 
@@ -89,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        grandparentLayout = findViewById(R.id.convLines);
         selectedLine = findViewById(R.id.line0);
         selectedText = (TextView) selectedLine.getChildAt(1);
         selectedTag = selectedText.getTag().toString();
