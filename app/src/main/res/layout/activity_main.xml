@@ -127,6 +127,7 @@
                 android:id="@+id/cur3"
                 android:layout_width="113dp"
                 android:layout_height="match_parent"
+
                 app:srcCompat="@android:color/holo_red_light" />
 
             <TextView
