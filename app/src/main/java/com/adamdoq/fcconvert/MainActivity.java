@@ -8,7 +8,11 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayout;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
@@ -24,8 +28,11 @@ public class MainActivity extends AppCompatActivity {
     Currency selectedCurrency;
     TextView selectedText;
     String selectedTag;
+    ScrollView currencyDrawer;
+    ImageView closeDrawerTrigger;
 
     private ArrayList<Currency> setCurrencies;
+    private ArrayList<String> currencyList;
 
     private boolean newVal = true;
 
@@ -49,6 +56,20 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    public void openCurrencyDrawer(View view) {
+        currencyDrawer.setVisibility(View.VISIBLE);
+        currencyDrawer.animate().translationXBy(currencyDrawer.getWidth()).setDuration(500);
+
+        closeDrawerTrigger.setVisibility(View.VISIBLE);
+    }
+
+    public void closeCurrencyDrawer(View view) {
+        currencyDrawer.animate().translationXBy(currencyDrawer.getWidth()).setDuration(500);
+        currencyDrawer.setVisibility(View.GONE);
+
+        closeDrawerTrigger.setVisibility(View.GONE);
     }
 
     public void enterVal(View view) {
@@ -102,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,11 +149,38 @@ public class MainActivity extends AppCompatActivity {
 
         selectedCurrency = setCurrencies.get(0);
 
-        //currencyRates = new HashMap<>();
-        //currencyRates.put("USD", 1f);
-        //currencyRates.put("FFGIL", 0.066666f);
-        //currencyRates.put("SWIC", 1.111111f);
-        //currencyRates.put("ZHR", 0.454545f);
+
+        currencyDrawer = findViewById(R.id.currencyDrawer);
+        currencyDrawer.setVisibility(View.GONE);
+        currencyDrawer.setTranslationX(currencyDrawer.getWidth());
+
+        closeDrawerTrigger = findViewById(R.id.closeDrawerTrigger);
+        currencyDrawer.setVisibility(View.GONE);
+
+        currencyList = new ArrayList<>(
+                Arrays.asList("Friend", "Friendo", "Friendirino"
+        ));
+
+        TextView text = findViewById(R.id.textView);
+        text.setText(currencyList.get(0));
+
+        text = findViewById(R.id.textView2);
+        text.setText(currencyList.get(1));
+
+
+
+
+
+        /*
+
+
+
+
+        ArrayAdapter currencyDrawerAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, currencyList);
+
+        currencyDrawer.setAdapter(currencyDrawerAdapter);
+
+*/
 
         Log.i("text", selectedText.getText().toString());
 
