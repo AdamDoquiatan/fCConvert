@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import android.support.v7.widget.GridLayout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView closeDrawerTrigger;
 
     private ArrayList<Currency> setCurrencies;
-    private ArrayList<String> currencyList;
+    private ArrayList<Currency> currencyList;
 
     private boolean newVal = true;
 
@@ -58,8 +59,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-    //public void firstCurrencyDrawerOpen
 
     public void openCurrencyDrawer(View view) {
         currencyDrawer.animate().translationXBy(-currencyDrawer.getWidth()).setDuration(300);
@@ -141,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Set starting state
         grandparentLayout = findViewById(R.id.convLines);
         selectedLine = findViewById(R.id.line0);
         selectedText = (TextView) selectedLine.getChildAt(1);
@@ -149,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
         selectedLine.setBackgroundColor(Color.DKGRAY);
         selectedText.setTextColor(Color.WHITE);
 
+        // Set starting loaded currencies
         setCurrencies = new ArrayList<>(Arrays.asList(new USD(), new FFGIL(), new EmptyLine(), new ZHR()));
 
         ImageView icon = findViewById(R.id.icon0);
@@ -163,8 +164,9 @@ public class MainActivity extends AppCompatActivity {
         selectedCurrency = setCurrencies.get(0);
 
 
-
+        // Set up currency drawer
         currencyDrawer = findViewById(R.id.currencyDrawer);
+        currencyDrawer.setVisibility(View.VISIBLE);
 
         currencyDrawer.post(new Runnable() {
             @Override
@@ -173,37 +175,43 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        // Populate currency drawer
         closeDrawerTrigger = findViewById(R.id.closeDrawerTrigger);
         closeDrawerTrigger.setVisibility(View.GONE);
         closeDrawerTrigger.setEnabled(false);
 
         currencyList = new ArrayList<>(
-                Arrays.asList("Friend", "Friendo", "Friendirino"
-        ));
+                Arrays.asList(new FFGIL(), new SWIC(), new ZHR(), new USD())
+        );
 
-        TextView text = findViewById(R.id.textView);
-        text.setText(currencyList.get(0));
+        LinearLayout currencyDrawerLayout = findViewById(R.id.currencyDrawerLayout);
 
-        text = findViewById(R.id.textView2);
-        text.setText(currencyList.get(1));
+        for(Currency currency : currencyList) {
+            LinearLayout item = new LinearLayout(this);
+            item.setOrientation(LinearLayout.HORIZONTAL);
+
+            LinearLayout.LayoutParams iconParams =
+                    new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT);
+            iconParams.height = 250;
+            iconParams.width = 250;
+            iconParams.setMargins(20, 25, 20 ,25);
 
 
+            icon = new ImageView(this);
+            icon.setImageResource(currency.getIconId());
+            icon.setLayoutParams(iconParams);
+            item.addView(icon);
 
+            TextView text = new TextView(this);
+            text.setText(currency.getDescription());
+            text.setPadding(20, 25, 20, 25);
+            text.setTextSize(18);
+            text.setHeight(250);
+            text.setGravity(Gravity.CENTER_VERTICAL);
+            item.addView(text);
 
-
-        /*
-
-
-
-
-        ArrayAdapter currencyDrawerAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, currencyList);
-
-        currencyDrawer.setAdapter(currencyDrawerAdapter);
-
-*/
-
-        Log.i("text", selectedText.getText().toString());
-
+            currencyDrawerLayout.addView(item);
+        }
     }
 }

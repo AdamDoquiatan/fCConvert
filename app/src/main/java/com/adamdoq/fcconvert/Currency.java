@@ -6,6 +6,7 @@ abstract class Currency {
 
     protected float exchangeRate;
     protected int iconId;
+    protected  String description;
 
 
     public float getExchangeRate() {
@@ -15,4 +16,6 @@ abstract class Currency {
     public int getIconId() {
         return iconId;
     }
+
+    public String getDescription() { return description; }
 }
