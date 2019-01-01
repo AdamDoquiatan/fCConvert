@@ -1,6 +1,7 @@
 package com.adamdoq.fcconvert;
 
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.annotation.ColorInt;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -58,18 +59,30 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void openCurrencyDrawer(View view) {
-        currencyDrawer.setVisibility(View.VISIBLE);
-        currencyDrawer.animate().translationXBy(currencyDrawer.getWidth()).setDuration(500);
+    //public void firstCurrencyDrawerOpen
 
+    public void openCurrencyDrawer(View view) {
+        currencyDrawer.animate().translationXBy(-currencyDrawer.getWidth()).setDuration(300);
         closeDrawerTrigger.setVisibility(View.VISIBLE);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                closeDrawerTrigger.setEnabled(true);
+            }
+        }, 300);
     }
 
     public void closeCurrencyDrawer(View view) {
-        currencyDrawer.animate().translationXBy(currencyDrawer.getWidth()).setDuration(500);
-        currencyDrawer.setVisibility(View.GONE);
+        currencyDrawer.animate().translationXBy(currencyDrawer.getWidth()).setDuration(300);
+        closeDrawerTrigger.setEnabled(false);
 
-        closeDrawerTrigger.setVisibility(View.GONE);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                closeDrawerTrigger.setVisibility(View.GONE);
+            }
+        }, 300);
     }
 
     public void enterVal(View view) {
@@ -150,12 +163,20 @@ public class MainActivity extends AppCompatActivity {
         selectedCurrency = setCurrencies.get(0);
 
 
+
         currencyDrawer = findViewById(R.id.currencyDrawer);
-        currencyDrawer.setVisibility(View.GONE);
-        currencyDrawer.setTranslationX(currencyDrawer.getWidth());
+
+        currencyDrawer.post(new Runnable() {
+            @Override
+            public void run() {
+                currencyDrawer.setTranslationX(currencyDrawer.getWidth());
+            }
+        });
+
 
         closeDrawerTrigger = findViewById(R.id.closeDrawerTrigger);
-        currencyDrawer.setVisibility(View.GONE);
+        closeDrawerTrigger.setVisibility(View.GONE);
+        closeDrawerTrigger.setEnabled(false);
 
         currencyList = new ArrayList<>(
                 Arrays.asList("Friend", "Friendo", "Friendirino"
