@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     TextView selectedText;
     String selectedTag;
     ScrollView currencyDrawer;
+    GridLayout changeLine;
     ImageView closeDrawerTrigger;
 
     private ArrayList<Currency> setCurrencies;
@@ -60,7 +61,29 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void selectNewCurrency(View view) {
+        Log.i("New Cur", view.getTag().toString());
+
+        Currency newCurrency = currencyList.get(Integer.parseInt(view.getTag().toString()));
+
+        setCurrencies.set(Integer.parseInt(changeLine.getTag().toString()), newCurrency);
+
+        if(changeLine.getTag().toString().equals(selectedLine.getTag().toString())) {
+            updateSelectedCurrency(selectedLine.getChildAt(1));
+        }
+        updateUnselectedCurrencies();
+
+        Log.i("this", setCurrencies.toString());
+
+        ImageView icon = (ImageView) changeLine.getChildAt(0);
+        icon.setImageResource(newCurrency.getIconId());
+
+        closeCurrencyDrawer(view);
+    }
+
     public void openCurrencyDrawer(View view) {
+        changeLine = (GridLayout) view.getParent();
+
         currencyDrawer.animate().translationXBy(-currencyDrawer.getWidth()).setDuration(300);
         closeDrawerTrigger.setVisibility(View.VISIBLE);
 
@@ -121,6 +144,13 @@ public class MainActivity extends AppCompatActivity {
             selectedText.setText("0.0");
         }
 
+        updateUnselectedCurrencies();
+
+    }
+
+    public void updateUnselectedCurrencies() {
+        DecimalFormat formatter = new DecimalFormat();
+        formatter.applyPattern("0.##");
 
         float numVal = selectedCurrency.getExchangeRate() * Float.parseFloat(selectedText.getText().toString());
 
@@ -132,6 +162,14 @@ public class MainActivity extends AppCompatActivity {
                         / setCurrencies.get(i).getExchangeRate())));
             }
         }
+    }
+
+    public void updateSelectedCurrency(View view) {
+        newVal = true;
+        selectedLine = (GridLayout) view.getParent();
+        selectedText = (TextView) view;
+        selectedTag = view.getTag().toString();
+        selectedCurrency = setCurrencies.get(Integer.parseInt(view.getTag().toString()));
     }
 
 
@@ -186,9 +224,19 @@ public class MainActivity extends AppCompatActivity {
 
         LinearLayout currencyDrawerLayout = findViewById(R.id.currencyDrawerLayout);
 
+        int listedCurrencies = 0;
+
         for(Currency currency : currencyList) {
             LinearLayout item = new LinearLayout(this);
             item.setOrientation(LinearLayout.HORIZONTAL);
+            item.setTag(listedCurrencies);
+            listedCurrencies++;
+            item.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    selectNewCurrency(v);
+                }
+            });
 
             LinearLayout.LayoutParams iconParams =
                     new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
@@ -202,6 +250,7 @@ public class MainActivity extends AppCompatActivity {
             icon.setImageResource(currency.getIconId());
             icon.setLayoutParams(iconParams);
             item.addView(icon);
+
 
             TextView text = new TextView(this);
             text.setText(currency.getDescription());

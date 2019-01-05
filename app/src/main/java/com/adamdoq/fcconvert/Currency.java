@@ -18,4 +18,5 @@ abstract class Currency {
     }
 
     public String getDescription() { return description; }
+
 }
