@@ -7,6 +7,7 @@ abstract class Currency {
     protected float exchangeRate;
     protected int iconId;
     protected  String description;
+    protected int drawerBgId;
 
 
     public float getExchangeRate() {

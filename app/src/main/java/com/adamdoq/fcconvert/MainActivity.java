@@ -1,8 +1,8 @@
 package com.adamdoq.fcconvert;
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
-import android.support.annotation.ColorInt;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -10,17 +10,14 @@ import android.support.v7.widget.GridLayout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -51,10 +48,12 @@ public class MainActivity extends AppCompatActivity {
                 GridLayout parentLayout = (GridLayout) grandparentLayout.getChildAt(i);
                 TextView textView = (TextView) parentLayout.getChildAt(1);
                 if(parentLayout.getChildAt(1).getTag().equals(selectedTag)) {
-                    parentLayout.setBackgroundColor(Color.DKGRAY);
+                    parentLayout.getChildAt(1).setBackgroundResource(R.drawable.line_background_grey);
+                    parentLayout.getChildAt(0).setBackgroundResource(R.drawable.line_background_grey);
                     textView.setTextColor(Color.WHITE);
                 } else {
-                    parentLayout.setBackgroundColor(Color.WHITE);
+                    parentLayout.getChildAt(1).setBackgroundResource(R.drawable.line_background_white);
+                    parentLayout.getChildAt(0).setBackgroundResource(R.drawable.line_background_white);
                     textView.setTextColor(Color.BLACK);
                 }
             }
@@ -184,7 +183,8 @@ public class MainActivity extends AppCompatActivity {
         selectedText = (TextView) selectedLine.getChildAt(1);
         selectedTag = selectedText.getTag().toString();
 
-        selectedLine.setBackgroundColor(Color.DKGRAY);
+        selectedLine.getChildAt(1).setBackgroundResource(R.drawable.line_background_grey);
+        selectedLine.getChildAt(0).setBackgroundResource(R.drawable.line_background_grey);
         selectedText.setTextColor(Color.WHITE);
 
         // Set starting loaded currencies
@@ -230,6 +230,21 @@ public class MainActivity extends AppCompatActivity {
             LinearLayout item = new LinearLayout(this);
             item.setOrientation(LinearLayout.HORIZONTAL);
             item.setTag(listedCurrencies);
+
+            LinearLayout.LayoutParams drawerLineParams =
+                    new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT);
+            drawerLineParams.height = 300;
+            item.setLayoutParams(drawerLineParams);
+
+            if(currency.drawerBgId != 0) {
+                item.setBackgroundResource(currency.drawerBgId);
+                Drawable background = item.getBackground();
+                background.setAlpha(150);
+            } else {
+                item.setBackgroundResource(R.drawable.line_background_grey);
+            }
+
             listedCurrencies++;
             item.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -241,7 +256,7 @@ public class MainActivity extends AppCompatActivity {
             LinearLayout.LayoutParams iconParams =
                     new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                             LinearLayout.LayoutParams.WRAP_CONTENT);
-            iconParams.height = 250;
+            iconParams.height = 300;
             iconParams.width = 250;
             iconParams.setMargins(20, 25, 20 ,25);
 
@@ -254,9 +269,10 @@ public class MainActivity extends AppCompatActivity {
 
             TextView text = new TextView(this);
             text.setText(currency.getDescription());
+            text.setTextColor(Color.WHITE);
             text.setPadding(20, 25, 20, 25);
             text.setTextSize(18);
-            text.setHeight(250);
+            text.setHeight(300);
             text.setGravity(Gravity.CENTER_VERTICAL);
             item.addView(text);
 

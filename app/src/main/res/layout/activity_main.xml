@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/parchment_bg"
     tools:context=".MainActivity">
 
     <android.support.v7.widget.GridLayout
@@ -35,6 +36,10 @@
                 android:id="@+id/icon0"
                 android:layout_width="90dp"
                 android:layout_height="match_parent"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/line_background_white"
                 android:onClick="openCurrencyDrawer"
                 app:srcCompat="@android:color/holo_blue_bright" />
 
@@ -42,7 +47,12 @@
                 android:id="@+id/lineText0"
                 android:layout_width="163dp"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/line_background_white"
                 android:gravity="right|center_vertical"
+                android:maxLength="15"
                 android:onClick="selectLine"
                 android:paddingRight="10dp"
                 android:tag="0"
@@ -68,6 +78,10 @@
                 android:id="@+id/icon1"
                 android:layout_width="90dp"
                 android:layout_height="match_parent"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/line_background_white"
                 android:onClick="openCurrencyDrawer"
                 app:srcCompat="@android:color/holo_green_light" />
 
@@ -75,7 +89,12 @@
                 android:id="@+id/lineText1"
                 android:layout_width="163dp"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/line_background_white"
                 android:gravity="right|center_vertical"
+                android:maxLength="15"
                 android:onClick="selectLine"
                 android:paddingRight="10dp"
                 android:tag="1"
@@ -101,6 +120,10 @@
                 android:id="@+id/icon2"
                 android:layout_width="90dp"
                 android:layout_height="match_parent"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/line_background_white"
                 android:onClick="openCurrencyDrawer"
                 app:srcCompat="@android:color/holo_purple" />
 
@@ -108,7 +131,12 @@
                 android:id="@+id/lineText2"
                 android:layout_width="163dp"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/line_background_white"
                 android:gravity="right|center_vertical"
+                android:maxLength="15"
                 android:onClick="selectLine"
                 android:paddingRight="10dp"
                 android:tag="2"
@@ -134,7 +162,10 @@
                 android:id="@+id/icon3"
                 android:layout_width="90dp"
                 android:layout_height="match_parent"
-
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/line_background_white"
                 android:onClick="openCurrencyDrawer"
                 app:srcCompat="@android:color/holo_red_light" />
 
@@ -142,7 +173,12 @@
                 android:id="@+id/lineText3"
                 android:layout_width="163dp"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/line_background_white"
                 android:gravity="right|center_vertical"
+                android:maxLength="15"
                 android:onClick="selectLine"
                 android:paddingRight="10dp"
                 android:tag="3"
@@ -359,7 +395,7 @@
             android:id="@+id/currencyDrawerLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/holo_blue_light"
+            android:background="#000000"
             android:gravity="fill"
             android:orientation="vertical"
             android:visibility="visible">

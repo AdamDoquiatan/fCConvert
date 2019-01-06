@@ -6,5 +6,6 @@ public class SWIC extends Currency {
         exchangeRate = 1.111111f;
         iconId = R.drawable.swic_icon;
         description = "It's stars wars money!";
+        drawerBgId = R.drawable.swic_bg;
     }
 }
