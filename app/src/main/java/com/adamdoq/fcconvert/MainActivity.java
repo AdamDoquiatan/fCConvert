@@ -2,6 +2,7 @@ package com.adamdoq.fcconvert;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Icon;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,9 +16,15 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.concurrent.ExecutionException;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -222,6 +229,36 @@ public class MainActivity extends AppCompatActivity {
                 Arrays.asList(new FFGIL(), new SWIC(), new ZHR(), new USD())
         );
 
+        DownloadTask task = new DownloadTask();
+        try {
+            String json = task.execute("https://api.exchangeratesapi.io/latest?base=USD").get();
+            Log.i("json", json);
+
+            JSONObject jsonObject = new JSONObject(json);
+            JSONObject jsonChildObject = (JSONObject) jsonObject.get("rates");
+            Iterator<String> iterator = jsonChildObject.keys();
+
+            while(iterator.hasNext()) {
+                String key = iterator.next();
+
+                GenericCurrency genericCurrency = new GenericCurrency(
+                        Float.parseFloat(String.valueOf(jsonChildObject.get(key))),
+                        R.drawable.generic_icon,
+                        key,
+                        R.color.colorPrimaryDark
+                );
+                currencyList.add(genericCurrency);
+                //Log.i("main", key);
+                //Log.i("main", String.valueOf(jsonChildObject.get(key)));
+            }
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         LinearLayout currencyDrawerLayout = findViewById(R.id.currencyDrawerLayout);
 
         int listedCurrencies = 0;
@@ -245,7 +282,6 @@ public class MainActivity extends AppCompatActivity {
                 item.setBackgroundResource(R.drawable.line_background_grey);
             }
 
-            listedCurrencies++;
             item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -276,6 +312,8 @@ public class MainActivity extends AppCompatActivity {
             text.setGravity(Gravity.CENTER_VERTICAL);
             item.addView(text);
 
+            currency.setCurrencyId(listedCurrencies);
+            listedCurrencies++;
             currencyDrawerLayout.addView(item);
         }
     }
