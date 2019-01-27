@@ -4,8 +4,9 @@ public class FFGIL extends Currency {
 
     public FFGIL() {
         exchangeRate = 0.066666f;
-        iconId = R.drawable.barret_icon;
+
+        iconId = R.drawable.ff_icon;
         description = "It's final fantasy money!";
-        drawerBgId = R.drawable.ffgil_bg;
+        drawerBgId = R.drawable.ff_bg;
     }
 }

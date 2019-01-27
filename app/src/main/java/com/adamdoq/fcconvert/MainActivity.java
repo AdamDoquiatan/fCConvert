@@ -56,12 +56,20 @@ public class MainActivity extends AppCompatActivity {
                 TextView textView = (TextView) parentLayout.getChildAt(1);
                 if(parentLayout.getChildAt(1).getTag().equals(selectedTag)) {
                     parentLayout.getChildAt(1).setBackgroundResource(R.drawable.line_background_grey);
-                    parentLayout.getChildAt(0).setBackgroundResource(R.drawable.line_background_grey);
+                    Drawable background = parentLayout.getChildAt(1).getBackground();
+                    background.setAlpha(220);
                     textView.setTextColor(Color.WHITE);
+
+                    parentLayout.getChildAt(0).setBackgroundResource(R.drawable.line_background_grey);
+                    background = parentLayout.getChildAt(0).getBackground();
+                    background.setAlpha(220);
+                    parentLayout.getChildAt(0).setPadding(0,0,0,0);
                 } else {
                     parentLayout.getChildAt(1).setBackgroundResource(R.drawable.line_background_white);
-                    parentLayout.getChildAt(0).setBackgroundResource(R.drawable.line_background_white);
                     textView.setTextColor(Color.BLACK);
+
+                    parentLayout.getChildAt(0).setBackgroundResource(R.drawable.line_background_transparant);
+                    parentLayout.getChildAt(0).setPadding(0,0,0,0);
                 }
             }
         }
@@ -91,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         changeLine = (GridLayout) view.getParent();
 
         currencyDrawer.animate().translationXBy(-currencyDrawer.getWidth()).setDuration(300);
+        Log.i("Drawer Width", String.valueOf(currencyDrawer.getWidth()));
         closeDrawerTrigger.setVisibility(View.VISIBLE);
 
         new Handler().postDelayed(new Runnable() {
@@ -191,17 +200,27 @@ public class MainActivity extends AppCompatActivity {
         selectedTag = selectedText.getTag().toString();
 
         selectedLine.getChildAt(1).setBackgroundResource(R.drawable.line_background_grey);
-        selectedLine.getChildAt(0).setBackgroundResource(R.drawable.line_background_grey);
+        Drawable background = selectedLine.getChildAt(1).getBackground();
+        background.setAlpha(220);
         selectedText.setTextColor(Color.WHITE);
 
+
+        selectedLine.getChildAt(0).setBackgroundResource(R.drawable.line_background_grey);
+        selectedLine.getChildAt(0).setPadding(0,0,0,0);
+        background = selectedLine.getChildAt(1).getBackground();
+        background.setAlpha(220);
+
         // Set starting loaded currencies
-        setCurrencies = new ArrayList<>(Arrays.asList(new USD(), new FFGIL(), new EmptyLine(), new ZHR()));
+        setCurrencies = new ArrayList<>(Arrays.asList(new USD(), new FFGIL(), new SWIC(), new ZHR()));
 
         ImageView icon = findViewById(R.id.icon0);
         icon.setImageResource(setCurrencies.get(0).getIconId());
 
         icon = findViewById(R.id.icon1);
         icon.setImageResource(setCurrencies.get(1).getIconId());
+
+        icon = findViewById(R.id.icon2);
+        icon.setImageResource(setCurrencies.get(2).getIconId());
 
         icon = findViewById(R.id.icon3);
         icon.setImageResource(setCurrencies.get(3).getIconId());
@@ -276,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
 
             if(currency.drawerBgId != 0) {
                 item.setBackgroundResource(currency.drawerBgId);
-                Drawable background = item.getBackground();
+                background = item.getBackground();
                 background.setAlpha(150);
             } else {
                 item.setBackgroundResource(R.drawable.line_background_grey);
@@ -295,6 +314,7 @@ public class MainActivity extends AppCompatActivity {
             iconParams.height = 300;
             iconParams.width = 250;
             iconParams.setMargins(20, 25, 20 ,25);
+            iconParams.setMargins(5, 2,2,2);
 
 
             icon = new ImageView(this);

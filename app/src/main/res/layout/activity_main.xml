@@ -39,8 +39,9 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginRight="1dp"
                 android:layout_marginBottom="2dp"
-                android:background="@drawable/line_background_white"
+                android:background="@drawable/line_background_transparant"
                 android:onClick="openCurrencyDrawer"
+                android:padding="0dp"
                 app:srcCompat="@android:color/holo_blue_bright" />
 
             <TextView
@@ -81,8 +82,9 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginRight="1dp"
                 android:layout_marginBottom="2dp"
-                android:background="@drawable/line_background_white"
+                android:background="@drawable/line_background_transparant"
                 android:onClick="openCurrencyDrawer"
+                android:padding="0dp"
                 app:srcCompat="@android:color/holo_green_light" />
 
             <TextView
@@ -123,8 +125,9 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginRight="1dp"
                 android:layout_marginBottom="2dp"
-                android:background="@drawable/line_background_white"
+                android:background="@drawable/line_background_transparant"
                 android:onClick="openCurrencyDrawer"
+                android:padding="0dp"
                 app:srcCompat="@android:color/holo_purple" />
 
             <TextView
@@ -165,8 +168,9 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginRight="1dp"
                 android:layout_marginBottom="2dp"
-                android:background="@drawable/line_background_white"
+                android:background="@drawable/line_background_transparant"
                 android:onClick="openCurrencyDrawer"
+                android:padding="0dp"
                 app:srcCompat="@android:color/holo_red_light" />
 
             <TextView
