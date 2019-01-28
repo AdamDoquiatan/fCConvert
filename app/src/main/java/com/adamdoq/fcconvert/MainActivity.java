@@ -23,6 +23,8 @@ import org.json.JSONObject;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
 
@@ -236,6 +238,17 @@ public class MainActivity extends AppCompatActivity {
         selectedCurrency = setCurrencies.get(Integer.parseInt(view.getTag().toString()));
     }
 
+    public int getGenericIcon(String key) {
+        switch (key) {
+            case "USD":
+                return 1;
+
+
+        }
+        return 0;
+    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -290,16 +303,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Populate currency drawer
         closeDrawerTrigger = findViewById(R.id.closeDrawerTrigger);
         closeDrawerTrigger.setVisibility(View.GONE);
         closeDrawerTrigger.setEnabled(false);
 
+        // Populate currency drawer -- custom currencies
         currencyList = new ArrayList<>(
                 Arrays.asList(new FFGIL(), new SWIC(), new ZHR(), new EmptyLine(), new USD())
         );
 
+        // Populate currency drawer -- generic currencies
         DownloadTask task = new DownloadTask();
+        ArrayList<Currency> genericCurrencyList = new ArrayList<>();
+
         try {
             String json = task.execute("https://api.exchangeratesapi.io/latest?base=USD").get();
             Log.i("json", json);
@@ -313,13 +329,15 @@ public class MainActivity extends AppCompatActivity {
 
                 GenericCurrency genericCurrency = new GenericCurrency(
                         Float.parseFloat(String.valueOf(jsonChildObject.get(key))),
+                        //getGenericIcon(key),
                         R.drawable.generic_icon,
                         key,
                         R.color.colorPrimaryDark
                 );
-                currencyList.add(genericCurrency);
-                //Log.i("main", key);
-                //Log.i("main", String.valueOf(jsonChildObject.get(key)));
+                genericCurrencyList.add(genericCurrency);
+                //currencyList.add(genericCurrency);
+                Log.i("main", key);
+                Log.i("main", String.valueOf(jsonChildObject.get(key)));
             }
         } catch (ExecutionException e) {
             e.printStackTrace();
@@ -327,6 +345,12 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+
+        Collections.sort(genericCurrencyList, new sortCurrencies());
+
+        for(Currency currency : genericCurrencyList) {
+            currencyList.add(currency);
         }
 
         LinearLayout currencyDrawerLayout = findViewById(R.id.currencyDrawerLayout);
@@ -389,5 +413,13 @@ public class MainActivity extends AppCompatActivity {
             listedCurrencies++;
             currencyDrawerLayout.addView(item);
         }
+    }
+}
+
+class sortCurrencies implements Comparator<Currency> {
+
+    @Override
+    public int compare(Currency cur1, Currency cur2) {
+        return cur1.getDescription().compareTo(cur2.getDescription());
     }
 }
