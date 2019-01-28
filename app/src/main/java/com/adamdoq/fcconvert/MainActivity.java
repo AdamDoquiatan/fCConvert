@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<Currency> setCurrencies;
     private ArrayList<Currency> currencyList;
+    private ArrayList<Integer> emptyTags;
 
     private boolean newVal = true;
 
@@ -55,21 +56,33 @@ public class MainActivity extends AppCompatActivity {
                 GridLayout parentLayout = (GridLayout) grandparentLayout.getChildAt(i);
                 TextView textView = (TextView) parentLayout.getChildAt(1);
                 if(parentLayout.getChildAt(1).getTag().equals(selectedTag)) {
-                    parentLayout.getChildAt(1).setBackgroundResource(R.drawable.line_background_grey);
-                    Drawable background = parentLayout.getChildAt(1).getBackground();
-                    background.setAlpha(220);
-                    textView.setTextColor(Color.WHITE);
+                    if(!emptyTags.contains(Integer.valueOf(i))) {
+                        parentLayout.getChildAt(1).setBackgroundResource(R.drawable.line_background_grey);
+                        Drawable background = parentLayout.getChildAt(1).getBackground();
+                        background.setAlpha(200);
+                        textView.setTextColor(Color.WHITE);
 
-                    parentLayout.getChildAt(0).setBackgroundResource(R.drawable.line_background_grey);
-                    background = parentLayout.getChildAt(0).getBackground();
-                    background.setAlpha(220);
-                    parentLayout.getChildAt(0).setPadding(0,0,0,0);
+                        parentLayout.getChildAt(0).setBackgroundResource(R.drawable.line_background_grey);
+                        background = parentLayout.getChildAt(0).getBackground();
+                        background.setAlpha(200);
+                        parentLayout.getChildAt(0).setPadding(0, 0, 0, 0);
+                    } else {
+                        parentLayout.getChildAt(1).setBackgroundResource(R.drawable.line_background_transparant_border);
+                        parentLayout.getChildAt(0).setBackgroundResource(R.drawable.line_background_transparant_border);
+                        parentLayout.getChildAt(0).setPadding(0, 0, 0, 0);
+                    }
                 } else {
-                    parentLayout.getChildAt(1).setBackgroundResource(R.drawable.line_background_white);
-                    textView.setTextColor(Color.BLACK);
+                    if(!emptyTags.contains(Integer.valueOf(i))) {
+                        parentLayout.getChildAt(1).setBackgroundResource(R.drawable.line_background_white);
+                        textView.setTextColor(Color.BLACK);
 
-                    parentLayout.getChildAt(0).setBackgroundResource(R.drawable.line_background_transparant);
-                    parentLayout.getChildAt(0).setPadding(0,0,0,0);
+                        parentLayout.getChildAt(0).setBackgroundResource(R.drawable.line_background_transparant);
+                        parentLayout.getChildAt(0).setPadding(0, 0, 0, 0);
+                    } else {
+                        parentLayout.getChildAt(1).setBackgroundResource(R.drawable.line_background_transparant_border);
+                        parentLayout.getChildAt(0).setBackgroundResource(R.drawable.line_background_transparant_border);
+                        parentLayout.getChildAt(0).setPadding(0, 0, 0, 0);
+                    }
                 }
             }
         }
@@ -82,15 +95,49 @@ public class MainActivity extends AppCompatActivity {
 
         setCurrencies.set(Integer.parseInt(changeLine.getTag().toString()), newCurrency);
 
-        if(changeLine.getTag().toString().equals(selectedLine.getTag().toString())) {
-            updateSelectedCurrency(selectedLine.getChildAt(1));
-        }
-        updateUnselectedCurrencies();
-
         Log.i("this", setCurrencies.toString());
 
         ImageView icon = (ImageView) changeLine.getChildAt(0);
         icon.setImageResource(newCurrency.getIconId());
+
+        if(newCurrency instanceof EmptyLine) {
+            icon.setImageResource(R.drawable.line_background_transparant_border);
+            changeLine.getChildAt(1).setBackgroundResource(R.drawable.line_background_transparant_border);
+            TextView changeText = (TextView) changeLine.getChildAt(1);
+            changeText.setText("0");
+
+            selectedText.setTextColor(Color.BLACK);
+
+            changeLine.getChildAt(0).setBackgroundResource(R.drawable.line_background_transparant_border);
+            changeLine.getChildAt(0).setPadding(0,0,0,0);
+            if(!emptyTags.contains(Integer.parseInt(changeLine.getTag().toString()))) {
+                emptyTags.add(Integer.parseInt(changeLine.getTag().toString()));
+                Log.i("emptyTags", String.valueOf(emptyTags));
+            }
+        } else if(emptyTags.contains(Integer.parseInt(changeLine.getTag().toString()))) {
+            emptyTags.remove(Integer.valueOf(Integer.parseInt(changeLine.getTag().toString())));
+            TextView changeText = (TextView) changeLine.getChildAt(1);
+            changeText.setText("0");
+
+            if(selectedLine.getTag().toString().equals(changeLine.getTag().toString())) {
+                changeLine.getChildAt(1).setBackgroundResource(R.drawable.line_background_grey);
+                Drawable background = selectedLine.getChildAt(1).getBackground();
+                background.setAlpha(200);
+
+                changeLine.getChildAt(0).setBackgroundResource(R.drawable.line_background_grey);
+                selectedText.setTextColor(Color.WHITE);
+                background = selectedLine.getChildAt(0).getBackground();
+                background.setAlpha(200);
+            } else {
+                changeLine.getChildAt(1).setBackgroundResource(R.drawable.line_background_white);
+                changeLine.getChildAt(0).setBackgroundResource(R.drawable.line_background_transparant);
+            }
+        }
+
+        if(changeLine.getTag().toString().equals(selectedLine.getTag().toString())) {
+            updateSelectedCurrency(selectedLine.getChildAt(1));
+        }
+        updateUnselectedCurrencies();
 
         closeCurrencyDrawer(view);
     }
@@ -126,41 +173,43 @@ public class MainActivity extends AppCompatActivity {
         DecimalFormat formatter = new DecimalFormat();
         formatter.applyPattern("0.##");
 
-        if(view.getTag().toString().equals("back")){
-            if(selectedText.getText().toString().length() < 2
-                    || selectedText.getText().toString().equals("0.0")
-                    || newVal == true) {
-                if(newVal == true) {
-                    newVal = false;
+        View parent = (View) selectedText.getParent();
+        if(!emptyTags.contains(Integer.valueOf(parent.getTag().toString()))) {
+            if(view.getTag().toString().equals("back")){
+                if(selectedText.getText().toString().length() < 2
+                        || selectedText.getText().toString().equals("0.0")
+                        || newVal == true) {
+                    if(newVal == true) {
+                        newVal = false;
+                    }
+                    selectedText.setText("" + 0);
+                } else {
+                    selectedText.setText(selectedText.getText().toString()
+                            .substring(0, selectedText.getText().toString().length() - 1));
                 }
-                selectedText.setText("" + 0);
+            } else if(newVal || selectedText.getText().toString().equals("0")) {
+                selectedText.setText("" + view.getTag().toString());
+                newVal = false;
+            } else if(selectedText.getText().toString().equals("0.0")) {
+                if(view.getTag().toString().equals("0")) {
+                    selectedText.append("0");
+                } else {
+                    selectedText.setText("0." + view.getTag().toString());
+                }
             } else {
-                selectedText.setText(selectedText.getText().toString()
-                        .substring(0, selectedText.getText().toString().length() - 1));
+                selectedText.append("" + view.getTag().toString());
             }
-        } else if(newVal || selectedText.getText().toString().equals("0")) {
-            selectedText.setText("" + view.getTag().toString());
-            newVal = false;
-        } else if(selectedText.getText().toString().equals("0.0")) {
-            if(view.getTag().toString().equals("0")) {
-                selectedText.append("0");
-            } else {
-                selectedText.setText("0." + view.getTag().toString());
+
+            if(selectedText.getText().toString().length() - selectedText.getText().toString().replaceAll("\\.", "").length() > 1) {
+                selectedText.setText(selectedText.getText().toString().substring(0, selectedText.getText().toString().length() - 1));
             }
-        } else {
-            selectedText.append("" + view.getTag().toString());
+
+            if(selectedText.getText().toString().equals(".") || selectedText.getText().toString().equals("0.")) {
+                selectedText.setText("0.0");
+            }
+
+            updateUnselectedCurrencies();
         }
-
-        if(selectedText.getText().toString().length() - selectedText.getText().toString().replaceAll("\\.", "").length() > 1) {
-            selectedText.setText(selectedText.getText().toString().substring(0, selectedText.getText().toString().length() - 1));
-        }
-
-        if(selectedText.getText().toString().equals(".") || selectedText.getText().toString().equals("0.")) {
-            selectedText.setText("0.0");
-        }
-
-        updateUnselectedCurrencies();
-
     }
 
     public void updateUnselectedCurrencies() {
@@ -193,6 +242,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        emptyTags = new ArrayList<Integer>();
+
         // Set starting state
         grandparentLayout = findViewById(R.id.convLines);
         selectedLine = findViewById(R.id.line0);
@@ -201,14 +252,14 @@ public class MainActivity extends AppCompatActivity {
 
         selectedLine.getChildAt(1).setBackgroundResource(R.drawable.line_background_grey);
         Drawable background = selectedLine.getChildAt(1).getBackground();
-        background.setAlpha(220);
+        background.setAlpha(200);
         selectedText.setTextColor(Color.WHITE);
 
 
         selectedLine.getChildAt(0).setBackgroundResource(R.drawable.line_background_grey);
         selectedLine.getChildAt(0).setPadding(0,0,0,0);
-        background = selectedLine.getChildAt(1).getBackground();
-        background.setAlpha(220);
+        background = selectedLine.getChildAt(0).getBackground();
+        background.setAlpha(200);
 
         // Set starting loaded currencies
         setCurrencies = new ArrayList<>(Arrays.asList(new USD(), new FFGIL(), new SWIC(), new ZHR()));
@@ -245,7 +296,7 @@ public class MainActivity extends AppCompatActivity {
         closeDrawerTrigger.setEnabled(false);
 
         currencyList = new ArrayList<>(
-                Arrays.asList(new FFGIL(), new SWIC(), new ZHR(), new USD())
+                Arrays.asList(new FFGIL(), new SWIC(), new ZHR(), new EmptyLine(), new USD())
         );
 
         DownloadTask task = new DownloadTask();
@@ -293,12 +344,14 @@ public class MainActivity extends AppCompatActivity {
             drawerLineParams.height = 300;
             item.setLayoutParams(drawerLineParams);
 
-            if(currency.drawerBgId != 0) {
+            if(currency.drawerBgId != 0 && currency.drawerBgId != R.drawable.remove_bg) {
                 item.setBackgroundResource(currency.drawerBgId);
                 background = item.getBackground();
                 background.setAlpha(150);
+            } else if (currency.drawerBgId == R.drawable.remove_bg) {
+                    item.setBackgroundResource(currency.drawerBgId);
             } else {
-                item.setBackgroundResource(R.drawable.line_background_grey);
+                    item.setBackgroundResource(R.drawable.line_background_grey);
             }
 
             item.setOnClickListener(new View.OnClickListener() {
