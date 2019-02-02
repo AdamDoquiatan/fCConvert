@@ -240,12 +240,74 @@ public class MainActivity extends AppCompatActivity {
 
     public int getGenericIcon(String key) {
         switch (key) {
+            case "AUD":
+                return R.drawable.australia;
+            case "BGN":
+                return R.drawable.bulgaria;
+            case "BRL":
+                return R.drawable.brazil;
+            case "CAD":
+                return R.drawable.canada;
+            case "CHF":
+                return R.drawable.switzerland;
+            case "CNY":
+                return R.drawable.china;
+            case "CZK":
+                return R.drawable.czec_republic;
+            case "DKK":
+                return R.drawable.denmark;
+            case "EUR":
+                return R.drawable.european_union;
+            case "GBP":
+                return R.drawable.united_kingdom;
+            case "HKD":
+                return R.drawable.hong_kong;
+            case "HRK":
+                return R.drawable.croatia;
+            case "HUF":
+                return R.drawable.hungary;
+            case "IDR":
+                return R.drawable.indonesia;
+            case "ILS":
+                return R.drawable.israel;
+            case "INR":
+                return R.drawable.india;
+            case "ISK":
+                return R.drawable.iceland;
+            case "JPY":
+                return R.drawable.japan;
+            case "KRW":
+                return R.drawable.south_korea;
+            case "MXN":
+                return R.drawable.mexico;
+            case "MYR":
+                return R.drawable.malasya;
+            case "NOK":
+                return R.drawable.norway;
+            case "NZD":
+                return R.drawable.new_zealand;
+            case "PHP":
+                return R.drawable.philippines;
+            case "PLN":
+                return R.drawable.poland;
+            case "RON":
+                return R.drawable.romania;
+            case "RUB":
+                return R.drawable.russia;
+            case "SEK":
+                return R.drawable.sweden;
+            case "SGD":
+                return R.drawable.singapore;
+            case "THB":
+                return R.drawable.thailand;
+            case "TRY":
+                return R.drawable.turkey;
             case "USD":
-                return 1;
-
-
+                return R.drawable.united_states;
+            case "ZAR":
+                return R.drawable.south_africa;
         }
-        return 0;
+        return R.drawable.generic_icon;
     }
 
 
@@ -255,7 +317,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        emptyTags = new ArrayList<Integer>();
+        emptyTags = new ArrayList<>();
 
         // Set starting state
         grandparentLayout = findViewById(R.id.convLines);
@@ -275,7 +337,7 @@ public class MainActivity extends AppCompatActivity {
         background.setAlpha(200);
 
         // Set starting loaded currencies
-        setCurrencies = new ArrayList<>(Arrays.asList(new USD(), new FFGIL(), new SWIC(), new ZHR()));
+        setCurrencies = new ArrayList<>(Arrays.asList(new EmptyLine(), new FFGIL(), new SWIC(), new ZHR()));
 
         ImageView icon = findViewById(R.id.icon0);
         icon.setImageResource(setCurrencies.get(0).getIconId());
@@ -309,7 +371,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Populate currency drawer -- custom currencies
         currencyList = new ArrayList<>(
-                Arrays.asList(new FFGIL(), new SWIC(), new ZHR(), new EmptyLine(), new USD())
+                Arrays.asList(new FFGIL(), new SWIC(), new ZHR(), new EmptyLine())
         );
 
         // Populate currency drawer -- generic currencies
@@ -329,8 +391,7 @@ public class MainActivity extends AppCompatActivity {
 
                 GenericCurrency genericCurrency = new GenericCurrency(
                         Float.parseFloat(String.valueOf(jsonChildObject.get(key))),
-                        //getGenericIcon(key),
-                        R.drawable.generic_icon,
+                        getGenericIcon(key),
                         key,
                         R.color.colorPrimaryDark
                 );
@@ -390,8 +451,13 @@ public class MainActivity extends AppCompatActivity {
                             LinearLayout.LayoutParams.WRAP_CONTENT);
             iconParams.height = 300;
             iconParams.width = 250;
-            iconParams.setMargins(20, 25, 20 ,25);
-            iconParams.setMargins(5, 2,2,2);
+
+            if(listedCurrencies <= 4 - 1) {
+                iconParams.setMargins(5, 2,2,2);
+            } else {
+                iconParams.setMargins(30, 2,2,2);
+            }
+
 
 
             icon = new ImageView(this);
