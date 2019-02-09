@@ -71,40 +71,53 @@ public class MainActivity extends AppCompatActivity {
                 if(parentLayout.getChildAt(1).getTag().equals(selectedTag)) {
                     if(!emptyTags.contains(Integer.valueOf(i))) {
                         Log.i("3", "Here");
+                        linearLayout.getChildAt(0).setBackgroundResource(R.drawable.line_background_white);
                         linearLayout.getChildAt(1).setBackgroundResource(R.drawable.line_background_grey);
-                        Drawable background = parentLayout.getChildAt(1).getBackground();
-                        background.setAlpha(200);
+                        linearLayout.getChildAt(0).setPadding(0, 0, 15, 0);
+                        linearLayout.getChildAt(1).setPadding(0, 0, 15, 0);
+                        linearLayout.getChildAt(0).setAlpha(0.8f);
+                        linearLayout.getChildAt(1).setAlpha(0.8f);
+//                        Drawable background = parentLayout.getChildAt(1).getBackground();
+//                        background.setAlpha(200);
 
                         parentLayout.getChildAt(0).setBackgroundResource(R.drawable.line_background_transparant_border);
                         //background = parentLayout.getChildAt(0).getBackground();
                         parentLayout.getChildAt(0).setPadding(0, 0, 0, 0);
 
-                        currencyTextView.setText("SELECT");
+                        currencyTextView.setText("SELECTED");
                         currencyTextView.setTextColor(Color.WHITE);
-                        currencyTextView.setPadding(0, 0, 5, 0);
                     } else {
                         Log.i("4", "Here");
-                        parentLayout.getChildAt(1).setBackgroundResource(R.drawable.line_background_transparant_border);
-                        parentLayout.getChildAt(0).setBackgroundResource(R.drawable.line_background_transparant_border);
-                        parentLayout.getChildAt(0).setPadding(0, 0, 0, 0);
+                        linearLayout.getChildAt(0).setBackgroundResource(R.drawable.line_background_transparant_border);
+                        linearLayout.getChildAt(1).setBackgroundResource(R.drawable.line_background_transparant_border);
+                        linearLayout.getChildAt(0).setPadding(0, 0, 15, 0);
+                        linearLayout.getChildAt(1).setPadding(0, 0, 15, 0);
+                        linearLayout.getChildAt(0).setAlpha(0.8f);
+                        linearLayout.getChildAt(1).setAlpha(0.8f);
                     }
                 } else {
                     if(!emptyTags.contains(Integer.valueOf(i))) {
                         Log.i("5", "Here");
-                        linearLayout.getChildAt(1).setBackgroundResource(R.drawable.line_background_white);
-
                         parentLayout.getChildAt(0).setBackgroundResource(R.drawable.line_background_transparant);
                         parentLayout.getChildAt(0).setPadding(0, 0, 0, 0);
 
-                        currencyTextView.setText("Not Selecteddddddd");
+                        linearLayout.getChildAt(0).setBackgroundResource(R.drawable.line_background_white);
+                        linearLayout.getChildAt(1).setBackgroundResource(R.drawable.line_background_white);
+                        linearLayout.getChildAt(0).setPadding(0, 0, 15, 0);
+                        linearLayout.getChildAt(1).setPadding(0, 0, 15, 0);
+                        linearLayout.getChildAt(0).setAlpha(0.8f);
+                        linearLayout.getChildAt(1).setAlpha(0.8f);
+
+                        currencyTextView.setText("Not Selected");
                         currencyTextView.setTextColor(Color.BLACK);
-                        currencyTextView.setPadding(0, 0, 5, 0);
                     } else {
                         Log.i("6", "Here");
                         linearLayout.getChildAt(0).setBackgroundResource(R.drawable.line_background_transparant_border);
                         linearLayout.getChildAt(1).setBackgroundResource(R.drawable.line_background_transparant_border);
-                        linearLayout.getChildAt(0).setPadding(0, 0, 0, 0);
-                        linearLayout.getChildAt(1).setPadding(0, 0, 5, 0);
+                        linearLayout.getChildAt(0).setPadding(0, 0, 15, 0);
+                        linearLayout.getChildAt(1).setPadding(0, 0, 15, 0);
+                        linearLayout.getChildAt(0).setAlpha(0.8f);
+                        linearLayout.getChildAt(1).setAlpha(0.8f);
                     }
                 }
             }
@@ -125,43 +138,62 @@ public class MainActivity extends AppCompatActivity {
 
         LinearLayout linearLayout = (LinearLayout) changeLine.getChildAt(1);
 
+        // Inserting Empty Currency
         if(newCurrency instanceof EmptyLine) {
             Log.i("2", "Here");
 
-            icon.setImageResource(R.drawable.line_background_transparant_border);
+            TextView testText = (TextView) linearLayout.getChildAt(1);
+
+            Log.i("linearLayout", String.valueOf(testText.getText()));
+
             linearLayout.getChildAt(0).setBackgroundResource(R.drawable.line_background_transparant_border);
             linearLayout.getChildAt(1).setBackgroundResource(R.drawable.line_background_transparant_border);
-            linearLayout.getChildAt(0).setPadding(0,0,0,0);
-            linearLayout.getChildAt(1).setPadding(0,0,5,0);
+            linearLayout.getChildAt(0).setPadding(0,0,15,0);
+            linearLayout.getChildAt(1).setPadding(0,0,15,0);
+            linearLayout.getChildAt(0).setAlpha(0.8f);
+            linearLayout.getChildAt(1).setAlpha(0.8f);
+
+            icon.setImageResource(R.drawable.line_background_transparant_border);
             TextView changeText = (TextView) linearLayout.getChildAt(0);
             changeText.setText("0");
             changeText = (TextView) linearLayout.getChildAt(1);
-            changeText.setText("");
+            changeText.setText("BLANK");
             changeText.setTextColor(Color.BLACK);
 
-            changeLine.getChildAt(0).setBackgroundResource(R.drawable.line_background_transparant_border);
-            changeLine.getChildAt(0).setPadding(0,0,0,0);
+            // Line isn't already empty
             if(!emptyTags.contains(Integer.parseInt(changeLine.getTag().toString()))) {
                 emptyTags.add(Integer.parseInt(changeLine.getTag().toString()));
                 Log.i("emptyTags", String.valueOf(emptyTags));
             }
+
+            // Line is empty and...
         } else if(emptyTags.contains(Integer.parseInt(changeLine.getTag().toString()))) {
             emptyTags.remove(Integer.valueOf(Integer.parseInt(changeLine.getTag().toString())));
             TextView changeText = (TextView) linearLayout.getChildAt(0);
             changeText.setText("0");
 
+            // ...line is selected.
             if(selectedLine.getTag().toString().equals(changeLine.getTag().toString())) {
-                changeLine.getChildAt(1).setBackgroundResource(R.drawable.line_background_grey);
-                Drawable background = selectedLine.getChildAt(1).getBackground();
-                background.setAlpha(200);
+                linearLayout.getChildAt(0).setBackgroundResource(R.drawable.line_background_white);
+                linearLayout.getChildAt(1).setBackgroundResource(R.drawable.line_background_grey);
+                linearLayout.getChildAt(0).setAlpha(0.8f);
+                linearLayout.getChildAt(1).setAlpha(0.8f);
 
-                changeLine.getChildAt(0).setBackgroundResource(R.drawable.line_background_grey);
-                selectedText.setTextColor(Color.WHITE);
-                background = selectedLine.getChildAt(0).getBackground();
-                background.setAlpha(200);
+                changeLine.getChildAt(0).setBackgroundResource(R.drawable.line_background_transparant_border);
+
+                linearLayout.getChildAt(0).setPadding(0,0,15,0);
+                linearLayout.getChildAt(1).setPadding(0,0,15,0);
+
+            // ...line is NOT selected.
             } else {
-                changeLine.getChildAt(1).setBackgroundResource(R.drawable.line_background_white);
                 changeLine.getChildAt(0).setBackgroundResource(R.drawable.line_background_transparant);
+
+                linearLayout.getChildAt(0).setBackgroundResource(R.drawable.line_background_white);
+                linearLayout.getChildAt(1).setBackgroundResource(R.drawable.line_background_white);
+                linearLayout.getChildAt(0).setPadding(0,0,15,0);
+                linearLayout.getChildAt(1).setPadding(0,0,15,0);
+                linearLayout.getChildAt(0).setAlpha(0.8f);
+                linearLayout.getChildAt(1).setAlpha(0.8f);
             }
         }
 
