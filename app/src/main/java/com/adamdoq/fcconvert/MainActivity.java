@@ -29,6 +29,8 @@ import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
 
+    static final float USD = 1;
+
     GridLayout grandparentLayout;
     GridLayout selectedLine;
     Currency selectedCurrency;
@@ -271,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
         DecimalFormat formatter = new DecimalFormat();
         formatter.applyPattern("0.##");
 
-        float numVal = selectedCurrency.getExchangeRate() * Float.parseFloat(selectedText.getText().toString());
+        float numVal = USD / selectedCurrency.getExchangeRate() * Float.parseFloat(selectedText.getText().toString());
 
         for (int i = 0; i < setCurrencies.size(); i++) {
             GridLayout parentLayout = (GridLayout) grandparentLayout.getChildAt(i);
@@ -279,7 +281,7 @@ public class MainActivity extends AppCompatActivity {
                 LinearLayout linearLayout = (LinearLayout) parentLayout.getChildAt(1);
                 TextView textView = (TextView) linearLayout.getChildAt(0);
                 textView.setText(String.valueOf(formatter.format(numVal
-                        / setCurrencies.get(i).getExchangeRate())));
+                        * setCurrencies.get(i).getExchangeRate())));
             }
         }
     }
@@ -456,8 +458,8 @@ public class MainActivity extends AppCompatActivity {
                         key,
                         R.color.colorPrimaryDark
                 );
+
                 genericCurrencyList.add(genericCurrency);
-                //currencyList.add(genericCurrency);
                 Log.i("main", key);
                 Log.i("main", String.valueOf(jsonChildObject.get(key)));
             }
@@ -486,12 +488,14 @@ public class MainActivity extends AppCompatActivity {
             item.setOrientation(LinearLayout.HORIZONTAL);
             item.setTag(listedCurrencies);
 
+            //Defines drawer line params
             LinearLayout.LayoutParams drawerLineParams =
                     new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                             LinearLayout.LayoutParams.WRAP_CONTENT);
             drawerLineParams.height = 300;
             item.setLayoutParams(drawerLineParams);
 
+            //Sets backgrounds
             if (currency.drawerBgId != 0 && currency.drawerBgId != R.drawable.remove_bg) {
                 item.setBackgroundResource(currency.drawerBgId);
                 Drawable background = item.getBackground();
@@ -502,6 +506,8 @@ public class MainActivity extends AppCompatActivity {
                 item.setBackgroundResource(R.drawable.line_background_grey);
             }
 
+
+            //Sets onClick listener
             item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -509,6 +515,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+            //Defines icon params
             LinearLayout.LayoutParams iconParams =
                     new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                             LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -522,12 +529,13 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
+            //Sets icons
             ImageView icon = new ImageView(this);
             icon.setImageResource(currency.getIconId());
             icon.setLayoutParams(iconParams);
             item.addView(icon);
 
-
+            //Sets Text
             TextView text = new TextView(this);
             text.setText(currency.getDescription());
             text.setTextColor(Color.WHITE);
@@ -537,6 +545,7 @@ public class MainActivity extends AppCompatActivity {
             text.setGravity(Gravity.CENTER_VERTICAL);
             item.addView(text);
 
+            //Adds line to drawer
             currency.setCurrencyId(listedCurrencies);
             listedCurrencies++;
             currencyDrawerLayout.addView(item);
