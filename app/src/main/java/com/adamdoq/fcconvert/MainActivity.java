@@ -48,10 +48,9 @@ public class MainActivity extends AppCompatActivity {
     private boolean newVal = true;
 
     public void selectLine(View view) {
-        Log.i("0", "Here");
-        if(!view.getTag().toString().equals(selectedTag) || firstSelect) {
+        // Line is not already selected and not run from onCreate
+        if (!view.getTag().toString().equals(selectedTag) || firstSelect) {
             firstSelect = false;
-            Log.i("1", "Here");
             newVal = true;
 
             selectedLinear = (LinearLayout) view.getParent();
@@ -61,24 +60,30 @@ public class MainActivity extends AppCompatActivity {
             selectedTag = view.getTag().toString();
             selectedCurrency = setCurrencies.get(Integer.parseInt(view.getTag().toString()));
 
-            for(int i = 0; i < 4; i++) {
+            for (int i = 0; i < 4; i++) {
                 GridLayout parentLayout = (GridLayout) grandparentLayout.getChildAt(i);
                 LinearLayout linearLayout = (LinearLayout) parentLayout.getChildAt(1);
                 ImageView icon = (ImageView) parentLayout.getChildAt(0);
 
                 // Line is selected and...
-                if(parentLayout.getChildAt(1).getTag().equals(selectedTag)) {
+                if (parentLayout.getChildAt(1).getTag().equals(selectedTag)) {
                     // Line is NOT empty
-                    if(!emptyTags.contains(Integer.valueOf(i))) {
+                    if (!emptyTags.contains(Integer.valueOf(i))) {
                         setLineLayoutSelected(linearLayout);
                         setLineIconSelected(icon);
+                    } else {
+                        setLineLayoutEmpty(linearLayout);
+                        setLineIconEmpty(icon);
                     }
-                // Line is NOT selected and...
+                    // Line is NOT selected and...
                 } else {
                     // Line is NOT empty
-                    if(!emptyTags.contains(Integer.valueOf(i))) {
+                    if (!emptyTags.contains(Integer.valueOf(i))) {
                         setLineLayoutUnselected(linearLayout);
                         setLineIconUnSelected(icon);
+                    } else {
+                        setLineLayoutEmpty(linearLayout);
+                        setLineIconEmpty(icon);
                     }
                 }
             }
@@ -100,36 +105,36 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout linearLayout = (LinearLayout) changeLine.getChildAt(1);
 
         // Inserting Empty Currency and...
-        if(newCurrency instanceof EmptyLine) {
+        if (newCurrency instanceof EmptyLine) {
             setLineLayoutEmpty(linearLayout);
             setLineIconEmpty(icon);
 
             // Line isn't already empty
-            if(!emptyTags.contains(Integer.parseInt(changeLine.getTag().toString()))) {
-            emptyTags.add(Integer.parseInt(changeLine.getTag().toString()));
-            Log.i("emptyTags", String.valueOf(emptyTags));
+            if (!emptyTags.contains(Integer.parseInt(changeLine.getTag().toString()))) {
+                emptyTags.add(Integer.parseInt(changeLine.getTag().toString()));
+                Log.i("emptyTags", String.valueOf(emptyTags));
             }
 
             // Inserting non-empty currencyLine and...
-        } else if(emptyTags.contains(Integer.parseInt(changeLine.getTag().toString()))) {
+        } else if (emptyTags.contains(Integer.parseInt(changeLine.getTag().toString()))) {
             Log.i("here", "3");
             emptyTags.remove(Integer.valueOf(Integer.parseInt(changeLine.getTag().toString())));
             TextView changeText = (TextView) linearLayout.getChildAt(0);
             changeText.setText("0");
 
             // ...line is selected.
-            if(selectedLine.getTag().toString().equals(changeLine.getTag().toString())) {
+            if (selectedLine.getTag().toString().equals(changeLine.getTag().toString())) {
                 setLineLayoutSelected(linearLayout);
                 setLineIconSelected(icon);
 
-            // ...line is NOT selected.
+                // ...line is NOT selected.
             } else {
                 setLineLayoutUnselected(linearLayout);
                 setLineIconUnSelected(icon);
             }
         }
 
-        if(changeLine.getTag().toString().equals(selectedLine.getTag().toString())) {
+        if (changeLine.getTag().toString().equals(selectedLine.getTag().toString())) {
             updateSelectedCurrency(selectedLine.getChildAt(1));
         }
         updateUnselectedCurrencies();
@@ -166,8 +171,8 @@ public class MainActivity extends AppCompatActivity {
     private void setLineLayoutEmpty(LinearLayout linearLayout) {
         linearLayout.getChildAt(0).setBackgroundResource(R.drawable.line_background_transparant_border);
         linearLayout.getChildAt(1).setBackgroundResource(R.drawable.line_background_transparant_border);
-        linearLayout.getChildAt(0).setPadding(0,0,15,0);
-        linearLayout.getChildAt(1).setPadding(0,0,15,0);
+        linearLayout.getChildAt(0).setPadding(0, 0, 15, 0);
+        linearLayout.getChildAt(1).setPadding(0, 0, 15, 0);
         linearLayout.getChildAt(0).setAlpha(0.8f);
         linearLayout.getChildAt(1).setAlpha(0.8f);
 
@@ -224,12 +229,12 @@ public class MainActivity extends AppCompatActivity {
         formatter.applyPattern("0.##");
 
         View parent = (View) selectedText.getParent();
-        if(!emptyTags.contains(Integer.valueOf(parent.getTag().toString()))) {
-            if(view.getTag().toString().equals("back")){
-                if(selectedText.getText().toString().length() < 2
+        if (!emptyTags.contains(Integer.valueOf(parent.getTag().toString()))) {
+            if (view.getTag().toString().equals("back")) {
+                if (selectedText.getText().toString().length() < 2
                         || selectedText.getText().toString().equals("0.0")
                         || newVal == true) {
-                    if(newVal == true) {
+                    if (newVal == true) {
                         newVal = false;
                     }
                     selectedText.setText("" + 0);
@@ -237,11 +242,11 @@ public class MainActivity extends AppCompatActivity {
                     selectedText.setText(selectedText.getText().toString()
                             .substring(0, selectedText.getText().toString().length() - 1));
                 }
-            } else if(newVal || selectedText.getText().toString().equals("0")) {
+            } else if (newVal || selectedText.getText().toString().equals("0")) {
                 selectedText.setText("" + view.getTag().toString());
                 newVal = false;
-            } else if(selectedText.getText().toString().equals("0.0")) {
-                if(view.getTag().toString().equals("0")) {
+            } else if (selectedText.getText().toString().equals("0.0")) {
+                if (view.getTag().toString().equals("0")) {
                     selectedText.append("0");
                 } else {
                     selectedText.setText("0." + view.getTag().toString());
@@ -250,11 +255,11 @@ public class MainActivity extends AppCompatActivity {
                 selectedText.append("" + view.getTag().toString());
             }
 
-            if(selectedText.getText().toString().length() - selectedText.getText().toString().replaceAll("\\.", "").length() > 1) {
+            if (selectedText.getText().toString().length() - selectedText.getText().toString().replaceAll("\\.", "").length() > 1) {
                 selectedText.setText(selectedText.getText().toString().substring(0, selectedText.getText().toString().length() - 1));
             }
 
-            if(selectedText.getText().toString().equals(".") || selectedText.getText().toString().equals("0.")) {
+            if (selectedText.getText().toString().equals(".") || selectedText.getText().toString().equals("0.")) {
                 selectedText.setText("0.0");
             }
 
@@ -268,9 +273,9 @@ public class MainActivity extends AppCompatActivity {
 
         float numVal = selectedCurrency.getExchangeRate() * Float.parseFloat(selectedText.getText().toString());
 
-        for(int i = 0; i < setCurrencies.size(); i++) {
+        for (int i = 0; i < setCurrencies.size(); i++) {
             GridLayout parentLayout = (GridLayout) grandparentLayout.getChildAt(i);
-            if(parentLayout != selectedLine && (!(setCurrencies.get(i) instanceof EmptyLine))) {
+            if (parentLayout != selectedLine && (!(setCurrencies.get(i) instanceof EmptyLine))) {
                 LinearLayout linearLayout = (LinearLayout) parentLayout.getChildAt(1);
                 TextView textView = (TextView) linearLayout.getChildAt(0);
                 textView.setText(String.valueOf(formatter.format(numVal
@@ -365,17 +370,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        emptyTags = new ArrayList<>();
-
-        // Set starting state
         grandparentLayout = findViewById(R.id.convLines);
-        selectedLine = findViewById(R.id.line0);
-        selectedLinear = (LinearLayout) selectedLine.getChildAt(1);
-        selectedText = (TextView) selectedLinear.getChildAt(0);
-        selectedTag = selectedText.getTag().toString();
 
-        // Set starting loaded currencies
-        setCurrencies = new ArrayList<>(Arrays.asList(new FFGIL(), new FFGIL(), new SWIC(), new ZHR()));
+        setLoadedCurrencies(new FFGIL(), new SWIC(), new ZHR(), new EmptyLine());
+        trackEmptyLines();
+        setInitialSelectedLine();
+        configureCurrencyDrawer();
+        populateCurrencyLists();
+        populateCurrencyDrawer();
+    }
+
+    private void setLoadedCurrencies(Currency cur0, Currency cur1, Currency cur2, Currency cur3) {
+        setCurrencies = new ArrayList<>(Arrays.asList(cur0, cur1, cur2, cur3));
 
         ImageView icon = findViewById(R.id.icon0);
         icon.setImageResource(setCurrencies.get(0).getIconId());
@@ -388,10 +394,26 @@ public class MainActivity extends AppCompatActivity {
 
         icon = findViewById(R.id.icon3);
         icon.setImageResource(setCurrencies.get(3).getIconId());
+    }
 
+    private void trackEmptyLines() {
+        emptyTags = new ArrayList<>();
+        for(int i = 0; i < 4; i++) {
+            if (setCurrencies.get(i) instanceof EmptyLine) {
+                emptyTags.add(i);
+            }
+        }
+    }
+
+    private void setInitialSelectedLine() {
+        selectedLine = findViewById(R.id.line0);
+        selectedLinear = (LinearLayout) selectedLine.getChildAt(1);
+        selectedText = (TextView) selectedLinear.getChildAt(0);
+        selectedTag = selectedText.getTag().toString();
         selectLine(selectedText);
+    }
 
-        // Set up currency drawer
+    private void configureCurrencyDrawer() {
         currencyDrawer = findViewById(R.id.currencyDrawer);
         currencyDrawer.setVisibility(View.VISIBLE);
 
@@ -405,13 +427,15 @@ public class MainActivity extends AppCompatActivity {
         closeDrawerTrigger = findViewById(R.id.closeDrawerTrigger);
         closeDrawerTrigger.setVisibility(View.GONE);
         closeDrawerTrigger.setEnabled(false);
+    }
 
-        // Populate currency drawer -- custom currencies
+    private void populateCurrencyLists() {
+        // Populates custom currencies
         currencyList = new ArrayList<>(
                 Arrays.asList(new FFGIL(), new SWIC(), new ZHR(), new EmptyLine())
         );
 
-        // Populate currency drawer -- generic currencies
+        // Populates generic currencies
         DownloadTask task = new DownloadTask();
         ArrayList<Currency> genericCurrencyList = new ArrayList<>();
 
@@ -423,7 +447,7 @@ public class MainActivity extends AppCompatActivity {
             JSONObject jsonChildObject = (JSONObject) jsonObject.get("rates");
             Iterator<String> iterator = jsonChildObject.keys();
 
-            while(iterator.hasNext()) {
+            while (iterator.hasNext()) {
                 String key = iterator.next();
 
                 GenericCurrency genericCurrency = new GenericCurrency(
@@ -447,15 +471,17 @@ public class MainActivity extends AppCompatActivity {
 
         Collections.sort(genericCurrencyList, new sortCurrencies());
 
-        for(Currency currency : genericCurrencyList) {
+        for (Currency currency : genericCurrencyList) {
             currencyList.add(currency);
         }
+    }
 
+    private void populateCurrencyDrawer() {
         LinearLayout currencyDrawerLayout = findViewById(R.id.currencyDrawerLayout);
 
         int listedCurrencies = 0;
 
-        for(Currency currency : currencyList) {
+        for (Currency currency : currencyList) {
             LinearLayout item = new LinearLayout(this);
             item.setOrientation(LinearLayout.HORIZONTAL);
             item.setTag(listedCurrencies);
@@ -466,14 +492,14 @@ public class MainActivity extends AppCompatActivity {
             drawerLineParams.height = 300;
             item.setLayoutParams(drawerLineParams);
 
-            if(currency.drawerBgId != 0 && currency.drawerBgId != R.drawable.remove_bg) {
+            if (currency.drawerBgId != 0 && currency.drawerBgId != R.drawable.remove_bg) {
                 item.setBackgroundResource(currency.drawerBgId);
                 Drawable background = item.getBackground();
                 background.setAlpha(150);
             } else if (currency.drawerBgId == R.drawable.remove_bg) {
-                    item.setBackgroundResource(currency.drawerBgId);
+                item.setBackgroundResource(currency.drawerBgId);
             } else {
-                    item.setBackgroundResource(R.drawable.line_background_grey);
+                item.setBackgroundResource(R.drawable.line_background_grey);
             }
 
             item.setOnClickListener(new View.OnClickListener() {
@@ -489,15 +515,14 @@ public class MainActivity extends AppCompatActivity {
             iconParams.height = 300;
             iconParams.width = 250;
 
-            if(listedCurrencies <= 4 - 1) {
-                iconParams.setMargins(5, 2,2,2);
+            if (listedCurrencies <= 4 - 1) {
+                iconParams.setMargins(5, 2, 2, 2);
             } else {
-                iconParams.setMargins(30, 2,2,2);
+                iconParams.setMargins(30, 2, 2, 2);
             }
 
 
-
-            icon = new ImageView(this);
+            ImageView icon = new ImageView(this);
             icon.setImageResource(currency.getIconId());
             icon.setLayoutParams(iconParams);
             item.addView(icon);
