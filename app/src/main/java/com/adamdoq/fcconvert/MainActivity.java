@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                         setLineLayoutSelected(linearLayout, i);
                         setLineIconSelected(icon);
                     } else {
-                        setLineLayoutEmpty(linearLayout, i);
+                        setLineLayoutSelectedEmpty(linearLayout, i);
                         setLineIconEmpty(icon);
                     }
                     // Line is NOT selected and...
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                         setLineLayoutUnselected(linearLayout, i);
                         setLineIconUnSelected(icon);
                     } else {
-                        setLineLayoutEmpty(linearLayout, i);
+                        setLineLayoutUnselectedEmpty(linearLayout, i);
                         setLineIconEmpty(icon);
                     }
                 }
@@ -128,7 +128,12 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("emptyTags", String.valueOf(emptyTags));
             }
 
-                setLineLayoutEmpty(linearLayout, currencyPosition);
+            if (changeLine.getTag().toString().equals(selectedLine.getTag().toString())) {
+                setLineLayoutSelectedEmpty(linearLayout, currencyPosition);
+            } else {
+                setLineLayoutUnselectedEmpty(linearLayout, currencyPosition);
+            }
+
                 setLineIconEmpty(icon);
 
             // Inserting non-empty currencyLine and...
@@ -191,7 +196,21 @@ public class MainActivity extends AppCompatActivity {
         curLabel.setTextColor(Color.BLACK);
     }
 
-    private void setLineLayoutEmpty(LinearLayout linearLayout, int currencyPosition) {
+    private void setLineLayoutSelectedEmpty(LinearLayout linearLayout, int currencyPosition) {
+        linearLayout.getChildAt(0).setBackgroundResource(R.drawable.line_background_transparant_border);
+        linearLayout.getChildAt(1).setBackgroundResource(R.drawable.line_background_grey);
+
+        setStandardTextFieldPaddingAndAlpha(linearLayout);
+
+        TextView curLabel = (TextView) linearLayout.getChildAt(0);
+        curLabel.setText("0");
+        curLabel = (TextView) linearLayout.getChildAt(1);
+        curLabel.setText(setCurrencies.get(currencyPosition).getFullCurName());
+        curLabel.setTypeface(null, Typeface.BOLD);
+        curLabel.setTextColor(Color.WHITE);
+    }
+
+    private void setLineLayoutUnselectedEmpty(LinearLayout linearLayout, int currencyPosition) {
         linearLayout.getChildAt(0).setBackgroundResource(R.drawable.line_background_transparant_border);
         linearLayout.getChildAt(1).setBackgroundResource(R.drawable.line_background_transparant_border);
 
@@ -213,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setLineIconSelected(ImageView icon) {
-        icon.setBackgroundResource(R.drawable.line_background_transparant_border);
+        icon.setBackgroundResource(R.drawable.line_background_transparant);
         icon.setPadding(0, 0, 0, 0);
     }
 
