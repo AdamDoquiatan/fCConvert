@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setLineIconEmpty(ImageView icon) {
-        icon.setImageResource(R.drawable.line_background_transparant_border);
+        icon.setImageResource(R.drawable.empty_icon_border);
     }
 
     public void openCurrencyDrawer(View view) {
@@ -664,7 +664,7 @@ public class MainActivity extends AppCompatActivity {
             text.setText(currency.getDescription());
             text.setTextColor(Color.WHITE);
             text.setPadding(20, 25, 20, 25);
-            text.setTextSize(18);
+            text.setTextSize(17);
             text.setHeight(300);
             text.setGravity(Gravity.CENTER_VERTICAL);
             item.addView(text);

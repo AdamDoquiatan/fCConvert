@@ -6,7 +6,7 @@ public class ZHR extends Currency {
         exchangeRate = 2.2f;
         iconId = R.drawable.zhr_icon;
         fullCurName = "Hylian Rupee";
-        description = "It's zelda money!";
+        description = "Attack poultry; Get paid.";
         drawerBgId = R.drawable.zhr_bg;
     }
 

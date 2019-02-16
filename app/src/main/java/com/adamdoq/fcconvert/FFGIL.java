@@ -6,9 +6,7 @@ public class FFGIL extends Currency {
         exchangeRate = 15f;
         iconId = R.drawable.ff_icon;
         fullCurName = "Gil";
-        description = "It's final fantasy money!";
+        description = "Why monsters are carrying legal tender, we’ll never know.";
         drawerBgId = R.drawable.ff_bg;
-
-        //NOTE: Ivalice? Eorzea?
     }
 }
