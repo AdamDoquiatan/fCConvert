@@ -7,7 +7,7 @@ public class BL extends Currency {
         iconId = R.drawable.bl_icon;
         fullCurName = "Bullets";
         description = "The Moscow underground is a real seller’s market.";
-        // drawerBgId =
+        drawerBgId = R.drawable.bl_bg;
     }
 
 }

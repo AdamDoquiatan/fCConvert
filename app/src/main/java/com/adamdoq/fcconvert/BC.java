@@ -7,7 +7,7 @@ public class BC extends Currency {
         iconId = R.drawable.bc_icon;
         fullCurName = "Bottlecaps";
         description = "Nuka-Cola – not that Sarsaparilla crap.";
-       // drawerBgId =
+        drawerBgId = R.drawable.bc_bg;
     }
 
 }

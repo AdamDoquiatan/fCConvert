@@ -550,7 +550,7 @@ public class MainActivity extends AppCompatActivity {
     private void populateCurrencyLists() {
         // Populates custom currencies
         currencyList = new ArrayList<>(
-                Arrays.asList(new FFGIL(), new SWIC(), new ZHR(), new EmptyLine())
+                Arrays.asList(new BC(), new FFGIL(), new BL(), new FC(), new SWIC(), new ZHR(), new EmptyLine())
         );
 
         // Populates generic currencies
@@ -646,7 +646,7 @@ public class MainActivity extends AppCompatActivity {
             iconParams.height = 300;
             iconParams.width = 250;
 
-            if (listedCurrencies <= 4 - 1) {
+            if (listedCurrencies <= currencyList.size() - 1) {
                 iconParams.setMargins(5, 2, 2, 2);
             } else {
                 iconParams.setMargins(30, 2, 2, 2);
