@@ -606,7 +606,7 @@ public class MainActivity extends AppCompatActivity {
     private void populateCurrencyLists() {
         // Populates custom currencies
         currencyList = new ArrayList<>(
-                Arrays.asList(new HPWC(), new GOTWG(), new BC(), new FFGIL(), new BL(), new FC(),
+                Arrays.asList(new BC(), new FFGIL(), new GOTWG(), new HPWC(), new BL(), new FC(),
                         new SWIC(), new ZHR(), new EmptyLine())
         );
 

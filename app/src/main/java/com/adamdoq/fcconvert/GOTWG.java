@@ -13,10 +13,10 @@ public class GOTWG extends Currency {
     public GOTWG() {
         super();
         exchangeRate = 5.93f; //Coppers per US Dollar
-        iconId = R.drawable.bl_icon;
+        iconId = R.drawable.gotwc_icon;
         fullCurName = "Dragons - Stags - Coppers";
-        description = "";
-        drawerBgId = R.drawable.bc_bg;
+        description = "Westerosi Dragons";
+        drawerBgId = R.drawable.gotwc_bg;
     }
 
     @Override

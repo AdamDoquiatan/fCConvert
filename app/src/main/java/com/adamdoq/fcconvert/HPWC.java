@@ -13,10 +13,10 @@ public class HPWC extends Currency {
     public HPWC() {
         super();
         exchangeRate = 74.246f; //Knuts per US Dollar
-        iconId = R.drawable.bc_icon;
+        iconId = R.drawable.hpwc_icon;
         fullCurName = "Gallions - Sickles - Knuts";
-        description = "";
-        drawerBgId = R.drawable.bc_bg;
+        description = "Wizard Currency";
+        drawerBgId = R.drawable.hpwc_bg;
     }
 
     @Override
