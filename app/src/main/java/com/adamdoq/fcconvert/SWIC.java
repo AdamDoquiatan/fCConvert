@@ -7,7 +7,7 @@ public class SWIC extends Currency {
         exchangeRate = 0.90f;
         iconId = R.drawable.swic_icon;
         fullCurName = "Imperial Credits";
-        description = "Because Rep Creds are no good here.";
+        description = "Imperial Credits";
         drawerBgId = R.drawable.swic_bg;
     }
 }

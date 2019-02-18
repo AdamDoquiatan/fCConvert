@@ -15,7 +15,7 @@ public class GOTWG extends Currency {
         exchangeRate = 5.93f; //Coppers per US Dollar
         iconId = R.drawable.gotwc_icon;
         fullCurName = "Dragons - Stags - Coppers";
-        description = "Westerosi Dragons";
+        description = "Westerosi Coinage";
         drawerBgId = R.drawable.gotwc_bg;
     }
 

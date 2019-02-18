@@ -7,7 +7,7 @@ public class FC extends Currency {
         exchangeRate = 1.19f;
         iconId = R.drawable.fc_icon;
         fullCurName = "Federation Credits";
-        description = "Replicators have tanked the exchange rate.";
+        description = "Federation Credits";
         drawerBgId = R.drawable.fc_bg;
     }
 

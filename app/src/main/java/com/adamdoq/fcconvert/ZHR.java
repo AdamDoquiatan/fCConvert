@@ -6,8 +6,8 @@ public class ZHR extends Currency {
         super();
         exchangeRate = 2.2f;
         iconId = R.drawable.zhr_icon;
-        fullCurName = "Hylian Rupee";
-        description = "Attack poultry; Get paid.";
+        fullCurName = "Hylian Rupees";
+        description = "Hylian Rupees";
         drawerBgId = R.drawable.zhr_bg;
     }
 }

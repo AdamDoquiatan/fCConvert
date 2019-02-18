@@ -606,8 +606,8 @@ public class MainActivity extends AppCompatActivity {
     private void populateCurrencyLists() {
         // Populates custom currencies
         currencyList = new ArrayList<>(
-                Arrays.asList(new BC(), new FFGIL(), new GOTWG(), new HPWC(), new BL(), new FC(),
-                        new SWIC(), new ZHR(), new EmptyLine())
+                Arrays.asList(new BC(), new FFGIL(), new GOTWG(), new ZHR(), new HPWC(), new BL(),
+                        new SWIC(), new FC(), new EmptyLine())
         );
 
         // Populates generic currencies
@@ -721,7 +721,7 @@ public class MainActivity extends AppCompatActivity {
             text.setText(currency.getDescription());
             text.setTextColor(Color.WHITE);
             text.setPadding(20, 25, 20, 25);
-            text.setTextSize(17);
+            text.setTextSize(19);
             text.setHeight(300);
             text.setGravity(Gravity.CENTER_VERTICAL);
             item.addView(text);

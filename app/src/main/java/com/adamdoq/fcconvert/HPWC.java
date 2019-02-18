@@ -15,7 +15,7 @@ public class HPWC extends Currency {
         exchangeRate = 74.246f; //Knuts per US Dollar
         iconId = R.drawable.hpwc_icon;
         fullCurName = "Gallions - Sickles - Knuts";
-        description = "Wizard Currency";
+        description = "Wizard Wealth";
         drawerBgId = R.drawable.hpwc_bg;
     }
 

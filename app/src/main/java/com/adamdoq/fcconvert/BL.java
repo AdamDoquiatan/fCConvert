@@ -6,8 +6,8 @@ public class BL extends Currency {
         super();
         exchangeRate = 5.55f;
         iconId = R.drawable.bl_icon;
-        fullCurName = "Bullets";
-        description = "The Moscow underground is a real seller’s market.";
+        fullCurName = "Moscow Metro Ammo (8mm)";
+        description = "Moscow Metro Ammo (8mm)";
         drawerBgId = R.drawable.bl_bg;
     }
 

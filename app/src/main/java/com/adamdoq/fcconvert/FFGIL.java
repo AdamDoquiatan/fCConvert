@@ -6,8 +6,8 @@ public class FFGIL extends Currency {
         super();
         exchangeRate = 15f;
         iconId = R.drawable.ff_icon;
-        fullCurName = "Gil";
-        description = "Why monsters are carrying legal tender, we’ll never know.";
+        fullCurName = "Ivalician Gil";
+        description = "Ivalician Gil";
         drawerBgId = R.drawable.ff_bg;
     }
 }
