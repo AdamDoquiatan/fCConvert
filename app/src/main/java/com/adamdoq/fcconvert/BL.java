@@ -3,6 +3,7 @@ package com.adamdoq.fcconvert;
 public class BL extends Currency {
 
     public BL() {
+        super();
         exchangeRate = 5.55f;
         iconId = R.drawable.bl_icon;
         fullCurName = "Bullets";

@@ -3,6 +3,7 @@ package com.adamdoq.fcconvert;
 public class SWIC extends Currency {
 
     public SWIC() {
+        super();
         exchangeRate = 0.90f;
         iconId = R.drawable.swic_icon;
         fullCurName = "Imperial Credits";

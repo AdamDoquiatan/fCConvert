@@ -3,6 +3,7 @@ package com.adamdoq.fcconvert;
 public class EmptyLine extends Currency {
 
     public EmptyLine() {
+        super();
         exchangeRate = 0;
         iconId = R.drawable.line_background_transparant;
         fullCurName = "EMPTY";

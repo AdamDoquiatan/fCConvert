@@ -3,6 +3,7 @@ package com.adamdoq.fcconvert;
 public class BC extends Currency {
 
     public BC() {
+        super();
         exchangeRate = 1.59f;
         iconId = R.drawable.bc_icon;
         fullCurName = "Bottlecaps";

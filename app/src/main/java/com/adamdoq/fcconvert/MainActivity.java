@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import android.support.v7.widget.GridLayout;
+import android.text.Editable;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Currency> setCurrencies;
     private ArrayList<Currency> currencyList;
     private ArrayList<Integer> emptyTags;
+    private ArrayList<String> threeDecCurrencies;
 
     private boolean firstSelect = true;
     private boolean newVal = true;
@@ -164,9 +167,7 @@ public class MainActivity extends AppCompatActivity {
             updateSelectedCurrency(selectedLine.getChildAt(1));
 
         }
-
-        updateUnselectedCurrencies();
-
+        updateUnselectedCurrencies(selectedCurrency.processNumVal(selectedCurrency, selectedText));
         closeCurrencyDrawer(view);
     }
 
@@ -273,53 +274,152 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void enterVal(View view) {
-        DecimalFormat formatter = new DecimalFormat();
-        formatter.applyPattern("0.##");
 
-        View parent = (View) selectedText.getParent();
-        if (!emptyTags.contains(Integer.valueOf(parent.getTag().toString()))) {
-            if (view.getTag().toString().equals("back")) {
-                if (selectedText.getText().toString().length() < 2
-                        || selectedText.getText().toString().equals("0.0")
-                        || newVal == true) {
-                    if (newVal == true) {
-                        newVal = false;
+        if(threeDecCurrencies.contains(String.valueOf(selectedCurrency.getClass().getSimpleName()))) {
+            threeCurEnterVal(view);
+        } else {
+            DecimalFormat formatter = new DecimalFormat();
+            formatter.applyPattern("0.##");
+
+            View parent = (View) selectedText.getParent();
+            if (!emptyTags.contains(Integer.valueOf(parent.getTag().toString()))) {
+                if (view.getTag().toString().equals("back")) {
+                    if (selectedText.getText().toString().length() < 2
+                            || selectedText.getText().toString().equals("0.0")
+                            || newVal == true) {
+                        if (newVal == true) {
+                            newVal = false;
+                        }
+                        selectedText.setText("" + 0);
+                    } else {
+                        selectedText.setText(selectedText.getText().toString()
+                                .substring(0, selectedText.getText().toString().length() - 1));
                     }
-                    selectedText.setText("" + 0);
+                } else if (newVal || selectedText.getText().toString().equals("0")) {
+                    selectedText.setText("" + view.getTag().toString());
+                    newVal = false;
+                } else if (selectedText.getText().toString().equals("0.0")) {
+                    if (view.getTag().toString().equals("0")) {
+                        selectedText.append("0");
+                    } else {
+                        selectedText.setText("0." + view.getTag().toString());
+                    }
                 } else {
-                    selectedText.setText(selectedText.getText().toString()
-                            .substring(0, selectedText.getText().toString().length() - 1));
+                    selectedText.append("" + view.getTag().toString());
                 }
-            } else if (newVal || selectedText.getText().toString().equals("0")) {
-                selectedText.setText("" + view.getTag().toString());
-                newVal = false;
-            } else if (selectedText.getText().toString().equals("0.0")) {
-                if (view.getTag().toString().equals("0")) {
-                    selectedText.append("0");
-                } else {
-                    selectedText.setText("0." + view.getTag().toString());
+
+                if (selectedText.getText().toString().length() - selectedText.getText().toString().replaceAll("\\.", "").length() > 1) {
+                    selectedText.setText(selectedText.getText().toString().substring(0, selectedText.getText().toString().length() - 1));
                 }
-            } else {
-                selectedText.append("" + view.getTag().toString());
+
+                if (selectedText.getText().toString().equals(".") || selectedText.getText().toString().equals("0.")) {
+                    selectedText.setText("0.0");
+                }
             }
 
-            if (selectedText.getText().toString().length() - selectedText.getText().toString().replaceAll("\\.", "").length() > 1) {
-                selectedText.setText(selectedText.getText().toString().substring(0, selectedText.getText().toString().length() - 1));
-            }
+            updateUnselectedCurrencies(selectedCurrency.processNumVal(selectedCurrency, selectedText));
 
-            if (selectedText.getText().toString().equals(".") || selectedText.getText().toString().equals("0.")) {
-                selectedText.setText("0.0");
-            }
-
-            updateUnselectedCurrencies();
         }
     }
 
-    public void updateUnselectedCurrencies() {
-        DecimalFormat formatter = new DecimalFormat();
-        formatter.applyPattern("0.##");
+    private void threeCurEnterVal(View view) {
 
-        float numVal = USD / selectedCurrency.getExchangeRate() * Float.parseFloat(selectedText.getText().toString());
+        Log.i("String Len", String.valueOf(selectedText.getText().toString().length()));
+        Log.i("String content", selectedText.getText().toString());
+        Log.i("Zero Check", String.valueOf(selectedText.getText().toString().equals("0")));
+
+
+        View parent = (View) selectedText.getParent();
+
+        Log.i("Tag Check", String.valueOf(emptyTags.contains(Integer.valueOf(parent.getTag().toString()))));
+
+
+        // Not Empty
+        if (!emptyTags.contains(Integer.valueOf(parent.getTag().toString()))) {
+            Log.i("Here", "1");
+            // Back selected
+            if (view.getTag().toString().equals("back")) {
+                Log.i("Here", "2");
+                // Value approaching zero
+                if (selectedText.getText().toString().length() < 2
+                        || newVal == true) {
+                    Log.i("Here", "3");
+                    if (newVal == true) {
+                        newVal = false;
+                        Log.i("Here", "4");
+                    }
+                    // Set to default value
+                    selectedText.setText("" + 0);
+                } else {
+                    Log.i("Here", "5");
+
+                    // Pop last digit
+                    Log.i("Here", "7");
+                    selectedText.setText(selectedText.getText().toString()
+                            .substring(0, selectedText.getText().toString().length() - 1));
+                }
+                // Disable decimal button
+            } else if (view.getTag().toString().equals(".")) {
+                Log.i("Here", "8");
+                Toast.makeText(this, "Decimals Automatic", Toast.LENGTH_SHORT).show();
+                // Text is 0 or default -- Replace value with selected number
+            } else if (newVal || selectedText.getText().toString().equals("0")) {
+                Log.i("Here", "9");
+                selectedText.setText("" + view.getTag().toString());
+                newVal = false;
+                Log.i("This ONe", selectedText.getText().toString());
+                // Text is not 0
+            } else {
+                Log.i("Here", "10");
+
+                // Append text with selected value
+                selectedText.append("" + view.getTag().toString());
+
+
+            }
+
+            // ????
+//            if (selectedText.getText().toString().length() - selectedText.getText().toString().replaceAll("\\.", "").length() > 1) {
+//                selectedText.setText(selectedText.getText().toString().substring(0, selectedText.getText().toString().length() - 1));
+//                Log.i("Here", "12");
+//            }
+
+//            // Prevent weird decimal cases. Revert to 0.0
+//            if (selectedText.getText().toString().equals(".") || selectedText.getText().toString().equals("0.")) {
+//                selectedText.setText("0.0");
+//            }
+        }
+
+        Log.i("Here", "13");
+
+        // Insert decimals
+        selectedText.setText(selectedText.getText(), TextView.BufferType.EDITABLE);
+        selectedText.setText(selectedText.getText().toString().replaceAll("\\.", ""));
+
+        Log.i("DeDeci Text Length", String.valueOf(selectedText.getText().toString().length()));
+        Log.i("DeDeci Text", selectedText.getText().toString());
+
+        int valueLength = selectedText.getText().toString().length();
+
+        if (selectedText.getText().toString().length() >= 3) {
+            Log.i("Here", "99");
+            ((Editable) selectedText.getText()).insert(valueLength - 2, ".");
+        }
+
+        valueLength = selectedText.getText().toString().length();
+        Log.i("DeDeci Text 1", selectedText.getText().toString());
+
+        // Above added decimal impacts this one
+        if (selectedText.getText().toString().length() >= 6) {
+            ((Editable) selectedText.getText()).insert(valueLength - 5, ".");
+        }
+
+        Log.i("DeDeci Text 2", selectedText.getText().toString());
+
+        updateUnselectedCurrencies(selectedCurrency.processNumVal(selectedCurrency, selectedText));
+    }
+
+    public void updateUnselectedCurrencies(float numVal) {
 
         if (Float.isNaN(numVal)) {
             numVal = 0;
@@ -330,8 +430,7 @@ public class MainActivity extends AppCompatActivity {
             if (parentLayout != selectedLine && (!(setCurrencies.get(i) instanceof EmptyLine))) {
                 LinearLayout linearLayout = (LinearLayout) parentLayout.getChildAt(1);
                 TextView textView = (TextView) linearLayout.getChildAt(0);
-                textView.setText(String.valueOf(formatter.format(numVal
-                        * setCurrencies.get(i).getExchangeRate())));
+                setCurrencies.get(i).updateCurrency(textView, numVal, setCurrencies);
             }
         }
     }
@@ -491,6 +590,7 @@ public class MainActivity extends AppCompatActivity {
         grandparentLayout = findViewById(R.id.convLines);
 
         setLoadedCurrencies(new FFGIL(), new SWIC(), new ZHR(), new EmptyLine());
+        setThreeDecCurrencies(new HPWC());
         trackEmptyLines();
         setInitialSelectedLine();
         configureCurrencyDrawer();
@@ -512,6 +612,17 @@ public class MainActivity extends AppCompatActivity {
 
         icon = findViewById(R.id.icon3);
         icon.setImageResource(setCurrencies.get(3).getIconId());
+    }
+
+    private void setThreeDecCurrencies(Currency ...currencies) {
+
+        threeDecCurrencies = new ArrayList<>();
+
+        for (Currency currency : currencies) {
+            threeDecCurrencies.add(String.valueOf(currency.getClass().getSimpleName()));
+        }
+
+
     }
 
     private void trackEmptyLines() {
@@ -550,7 +661,7 @@ public class MainActivity extends AppCompatActivity {
     private void populateCurrencyLists() {
         // Populates custom currencies
         currencyList = new ArrayList<>(
-                Arrays.asList(new BC(), new FFGIL(), new BL(), new FC(), new SWIC(), new ZHR(), new EmptyLine())
+                Arrays.asList(new HPWC(), new BC(), new FFGIL(), new BL(), new FC(), new SWIC(), new ZHR(), new EmptyLine())
         );
 
         // Populates generic currencies
