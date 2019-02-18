@@ -2,6 +2,8 @@ package com.adamdoq.fcconvert;
 
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -29,6 +31,8 @@ abstract class Currency {
         float numVal = USD / selectedCurrency.getExchangeRate() * Float.parseFloat(selectedText.getText().toString());
         return numVal;
     }
+
+    public void handleCustomDecimals(TextView selectedText){}
 
     public float getExchangeRate() {
         return exchangeRate;

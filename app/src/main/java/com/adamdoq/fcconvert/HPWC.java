@@ -1,7 +1,7 @@
 package com.adamdoq.fcconvert;
 
+import android.text.Editable;
 import android.util.Log;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ public class HPWC extends Currency {
 
     public HPWC() {
         super();
-        exchangeRate = 125f; //Knuts
+        exchangeRate = 74.246f; //Knuts per US Dollar
         iconId = R.drawable.bc_icon;
         fullCurName = "Gallions - Sickles - Knuts";
         description = "";
@@ -45,9 +45,25 @@ public class HPWC extends Currency {
         }
     }
 
-    @Override
-    // Getting the three dec version of the selected currency
+    public void handleCustomDecimals(TextView selectedText){
+        selectedText.setText(selectedText.getText(), TextView.BufferType.EDITABLE);
+        selectedText.setText(selectedText.getText().toString().replaceAll("\\.", ""));
 
+        int valueLength = selectedText.getText().toString().length();
+
+        if (selectedText.getText().toString().length() >= 3) {
+            ((Editable) selectedText.getText()).insert(valueLength - 2, ".");
+        }
+
+        valueLength = selectedText.getText().toString().length();
+
+        // Above added decimal impacts this one
+        if (selectedText.getText().toString().length() >= 6) {
+            ((Editable) selectedText.getText()).insert(valueLength - 5, ".");
+        }
+    }
+
+    @Override
     public float processNumVal(Currency selectedCurrency, TextView selectedText) {
 
         float numVal;
@@ -98,7 +114,8 @@ public class HPWC extends Currency {
         //value after conversion
         numVal = USD / selectedCurrency.getExchangeRate() * numVal;
 
-        //numVal = USD / selectedCurrency.getExchangeRate() * Float.parseFloat(selectedText.getText().toString());
         return numVal;
     }
+
+
 }

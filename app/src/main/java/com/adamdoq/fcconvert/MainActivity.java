@@ -324,98 +324,43 @@ public class MainActivity extends AppCompatActivity {
 
     private void threeCurEnterVal(View view) {
 
-        Log.i("String Len", String.valueOf(selectedText.getText().toString().length()));
-        Log.i("String content", selectedText.getText().toString());
-        Log.i("Zero Check", String.valueOf(selectedText.getText().toString().equals("0")));
-
-
         View parent = (View) selectedText.getParent();
-
-        Log.i("Tag Check", String.valueOf(emptyTags.contains(Integer.valueOf(parent.getTag().toString()))));
-
 
         // Not Empty
         if (!emptyTags.contains(Integer.valueOf(parent.getTag().toString()))) {
-            Log.i("Here", "1");
             // Back selected
             if (view.getTag().toString().equals("back")) {
-                Log.i("Here", "2");
                 // Value approaching zero
                 if (selectedText.getText().toString().length() < 2
                         || newVal == true) {
-                    Log.i("Here", "3");
                     if (newVal == true) {
                         newVal = false;
-                        Log.i("Here", "4");
                     }
                     // Set to default value
                     selectedText.setText("" + 0);
                 } else {
-                    Log.i("Here", "5");
-
                     // Pop last digit
-                    Log.i("Here", "7");
                     selectedText.setText(selectedText.getText().toString()
                             .substring(0, selectedText.getText().toString().length() - 1));
                 }
                 // Disable decimal button
             } else if (view.getTag().toString().equals(".")) {
-                Log.i("Here", "8");
                 Toast.makeText(this, "Decimals Automatic", Toast.LENGTH_SHORT).show();
                 // Text is 0 or default -- Replace value with selected number
             } else if (newVal || selectedText.getText().toString().equals("0")) {
-                Log.i("Here", "9");
                 selectedText.setText("" + view.getTag().toString());
                 newVal = false;
-                Log.i("This ONe", selectedText.getText().toString());
                 // Text is not 0
             } else {
-                Log.i("Here", "10");
-
                 // Append text with selected value
                 selectedText.append("" + view.getTag().toString());
-
-
             }
-
-            // ????
-//            if (selectedText.getText().toString().length() - selectedText.getText().toString().replaceAll("\\.", "").length() > 1) {
-//                selectedText.setText(selectedText.getText().toString().substring(0, selectedText.getText().toString().length() - 1));
-//                Log.i("Here", "12");
-//            }
-
-//            // Prevent weird decimal cases. Revert to 0.0
-//            if (selectedText.getText().toString().equals(".") || selectedText.getText().toString().equals("0.")) {
-//                selectedText.setText("0.0");
-//            }
         }
 
-        Log.i("Here", "13");
+        // Handle Decimals
+        selectedCurrency.handleCustomDecimals(selectedText);
 
-        // Insert decimals
-        selectedText.setText(selectedText.getText(), TextView.BufferType.EDITABLE);
-        selectedText.setText(selectedText.getText().toString().replaceAll("\\.", ""));
-
-        Log.i("DeDeci Text Length", String.valueOf(selectedText.getText().toString().length()));
-        Log.i("DeDeci Text", selectedText.getText().toString());
-
-        int valueLength = selectedText.getText().toString().length();
-
-        if (selectedText.getText().toString().length() >= 3) {
-            Log.i("Here", "99");
-            ((Editable) selectedText.getText()).insert(valueLength - 2, ".");
-        }
-
-        valueLength = selectedText.getText().toString().length();
-        Log.i("DeDeci Text 1", selectedText.getText().toString());
-
-        // Above added decimal impacts this one
-        if (selectedText.getText().toString().length() >= 6) {
-            ((Editable) selectedText.getText()).insert(valueLength - 5, ".");
-        }
-
-        Log.i("DeDeci Text 2", selectedText.getText().toString());
-
+        // Update Currencies
         updateUnselectedCurrencies(selectedCurrency.processNumVal(selectedCurrency, selectedText));
     }
 
@@ -590,7 +535,7 @@ public class MainActivity extends AppCompatActivity {
         grandparentLayout = findViewById(R.id.convLines);
 
         setLoadedCurrencies(new FFGIL(), new SWIC(), new ZHR(), new EmptyLine());
-        setThreeDecCurrencies(new HPWC());
+        setThreeDecCurrencies(new HPWC(), new GOTWG());
         trackEmptyLines();
         setInitialSelectedLine();
         configureCurrencyDrawer();
@@ -661,7 +606,8 @@ public class MainActivity extends AppCompatActivity {
     private void populateCurrencyLists() {
         // Populates custom currencies
         currencyList = new ArrayList<>(
-                Arrays.asList(new HPWC(), new BC(), new FFGIL(), new BL(), new FC(), new SWIC(), new ZHR(), new EmptyLine())
+                Arrays.asList(new HPWC(), new GOTWG(), new BC(), new FFGIL(), new BL(), new FC(),
+                        new SWIC(), new ZHR(), new EmptyLine())
         );
 
         // Populates generic currencies
