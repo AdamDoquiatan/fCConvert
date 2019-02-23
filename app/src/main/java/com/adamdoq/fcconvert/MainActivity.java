@@ -1,5 +1,6 @@
 package com.adamdoq.fcconvert;
 
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -11,6 +12,7 @@ import android.support.v7.widget.GridLayout;
 import android.text.Editable;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -552,6 +554,7 @@ public class MainActivity extends AppCompatActivity {
 
         grandparentLayout = findViewById(R.id.convLines);
 
+        setupKeypadOnTouchListeners();
         setLoadedCurrencies(new FFGIL(), new SWIC(), new ZHR(), new EmptyLine());
         setThreeDecCurrencies(new HPWC(), new GOTWG());
         trackEmptyLines();
@@ -560,6 +563,28 @@ public class MainActivity extends AppCompatActivity {
         configureCurrencyDrawer();
         populateCurrencyLists();
         populateCurrencyDrawer();
+    }
+
+    private void setupKeypadOnTouchListeners(){
+
+        GridLayout keypadLayout = findViewById(R.id.keypadLayout);
+
+        for (int i = 0; i < keypadLayout.getChildCount(); i++) {
+
+            final View button = keypadLayout.getChildAt(i);
+
+            button.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                        button.setBackgroundTintList(getResources().getColorStateList(R.color.OffGrey));
+                    } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                        button.setBackgroundTintList(getResources().getColorStateList(R.color.OffWhite));
+                    }
+                    return true;
+                }
+            });
+        }
     }
 
     private void setLoadedCurrencies(Currency cur0, Currency cur1, Currency cur2, Currency cur3) {
