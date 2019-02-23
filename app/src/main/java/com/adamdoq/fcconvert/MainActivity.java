@@ -246,6 +246,24 @@ public class MainActivity extends AppCompatActivity {
         icon.setImageResource(R.drawable.empty_icon_border);
     }
 
+    public void openInfoPane(View view) {
+        ImageView closeInfoTrigger = findViewById(R.id.closeInfoTrigger);
+        closeInfoTrigger.setVisibility(View.VISIBLE);
+        closeInfoTrigger.setEnabled(true);
+
+        TextView infoPane = findViewById(R.id.infoPane);
+        infoPane.setVisibility(View.VISIBLE);
+    }
+
+    public void closeInfoPane(View view) {
+        ImageView closeInfoTrigger = findViewById(R.id.closeInfoTrigger);
+        closeInfoTrigger.setVisibility(View.GONE);
+        closeInfoTrigger.setEnabled(false);
+
+        TextView infoPane = findViewById(R.id.infoPane);
+        infoPane.setVisibility(View.GONE);
+    }
+
     public void openCurrencyDrawer(View view) {
         changeLine = (GridLayout) view.getParent();
 
@@ -538,6 +556,7 @@ public class MainActivity extends AppCompatActivity {
         setThreeDecCurrencies(new HPWC(), new GOTWG());
         trackEmptyLines();
         setInitialSelectedLine();
+        configureInfoPane();
         configureCurrencyDrawer();
         populateCurrencyLists();
         populateCurrencyDrawer();
@@ -585,6 +604,17 @@ public class MainActivity extends AppCompatActivity {
         selectedText = (TextView) selectedLinear.getChildAt(0);
         selectedTag = selectedText.getTag().toString();
         selectLine(selectedText);
+    }
+
+    private void configureInfoPane() {
+        ImageView closeInfoTrigger = findViewById(R.id.closeInfoTrigger);
+        closeInfoTrigger.setVisibility(View.GONE);
+        closeInfoTrigger.setEnabled(false);
+
+        TextView infoPane = findViewById(R.id.infoPane);
+        infoPane.setBackgroundResource(R.drawable.infopane_background);
+        infoPane.setText("Don't sue me!");
+        infoPane.setVisibility(View.GONE);
     }
 
     private void configureCurrencyDrawer() {

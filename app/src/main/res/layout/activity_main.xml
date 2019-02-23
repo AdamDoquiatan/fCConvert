@@ -41,10 +41,11 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/infoButton"
             android:layout_width="30dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:onClick="openInfoPane"
             android:paddingLeft="5dp"
             android:paddingTop="11dp"
             android:paddingRight="5dp"
@@ -551,6 +552,34 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <TextView
+        android:id="@+id/infoPane"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="125dp"
+        android:layout_marginEnd="75dp"
+        android:layout_marginBottom="125dp"
+        android:gravity="center_horizontal|center"
+        android:text="THE TEXT"
+        android:textColor="@color/OffWhite"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/closeInfoTrigger"
+        app:layout_constraintEnd_toEndOf="@+id/action_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/closeInfoTrigger"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:onClick="closeInfoPane"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:color/transparent" />
 
 
 </android.support.constraint.ConstraintLayout>
