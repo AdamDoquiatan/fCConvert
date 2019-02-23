@@ -9,23 +9,50 @@
     android:paddingTop="0dp"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/textView"
+    <LinearLayout
+        android:id="@+id/action_bar"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:layout_margin="0dp"
         android:background="@drawable/actionbar_background"
-        android:fontFamily="sans-serif"
-        android:gravity="start|center_vertical"
-        android:paddingLeft="13dp"
-        android:paddingTop="2dp"
-        android:text="Fantasy Currency Converter"
-        android:textColor="@color/OffWhite"
-        android:textSize="24sp"
-        android:textStyle="bold"
+        android:gravity="fill"
+        android:orientation="horizontal"
+        android:padding="0dp"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/HeaderTitle"
+            android:layout_width="308dp"
+            android:layout_height="match_parent"
+            android:layout_margin="0dp"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif"
+            android:gravity="start|center_vertical"
+            android:paddingLeft="13dp"
+            android:paddingTop="2dp"
+            android:text="Fantasy Currency Converter"
+            android:textColor="@color/OffWhite"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingLeft="5dp"
+            android:paddingTop="11dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="9dp"
+            android:tint="@color/OffWhite"
+            app:srcCompat="@drawable/information" />
+
+    </LinearLayout>
 
     <android.support.v7.widget.GridLayout
         android:id="@+id/convLines"
@@ -37,7 +64,7 @@
         app:columnCount="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/action_bar"
         app:rowCount="4">
 
         <android.support.v7.widget.GridLayout
