@@ -315,6 +315,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void enterVal(View view) {
 
+        Log.i("Button", view.getTag().toString());
+
         if(threeDecCurrencies.contains(String.valueOf(selectedCurrency.getClass().getSimpleName()))) {
             threeCurEnterVal(view);
         } else {
@@ -575,7 +577,7 @@ public class MainActivity extends AppCompatActivity {
         grandparentLayout = findViewById(R.id.convLines);
 
         setupLocationServices();
-        setupKeypadOnTouchListeners();
+        //setupKeypadOnTouchListeners();
         setLoadedCurrencies(new FFGIL(), new SWIC(), new ZHR(), new EmptyLine());
         setThreeDecCurrencies(new HPWC(), new GOTWG());
         trackEmptyLines();
@@ -607,7 +609,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.i("CountryErr", "No country found");
                     }
                     userLocationFound = true;
-                }
+               }
             }
 
             @Override
@@ -624,12 +626,17 @@ public class MainActivity extends AppCompatActivity {
         Log.i("Here1", "Here1");
 
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
+                != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
             Log.i("Here2", "Here2");
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         } else {
             Log.i("Here3", "Here3");
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+            Log.i("Loc", userCountryName);
         }
     }
 
@@ -639,13 +646,18 @@ public class MainActivity extends AppCompatActivity {
 
         if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED) {
+                    == PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                            == PackageManager.PERMISSION_GRANTED) {
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
             }
         }
     }
 
     private void setupKeypadOnTouchListeners(){
+
+        Log.i("Stuff", "buttons");
 
         GridLayout keypadLayout = findViewById(R.id.keypadLayout);
 
