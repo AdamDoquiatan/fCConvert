@@ -317,8 +317,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void enterVal(View view) {
 
-        Log.i("Button", view.getTag().toString());
-
         if(threeDecCurrencies.contains(String.valueOf(selectedCurrency.getClass().getSimpleName()))) {
             threeCurEnterVal(view);
         } else {
@@ -578,13 +576,14 @@ public class MainActivity extends AppCompatActivity {
 
         grandparentLayout = findViewById(R.id.convLines);
 
+        showLoadingScreen();
+        setupKeypadOnTouchListeners();
         setupLocationServices();
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                //setupKeypadOnTouchListeners();
-                setLoadedCurrencies(new FFGIL(), new SWIC(), new ZHR(), new EmptyLine());
+                setLoadedCurrencies(new FFGIL(), new ZHR(), new GOTWG(), new EmptyLine());
                 setThreeDecCurrencies(new HPWC(), new GOTWG());
                 trackEmptyLines();
                 configureInfoPane();
@@ -592,8 +591,17 @@ public class MainActivity extends AppCompatActivity {
                 populateCurrencyLists();
                 populateCurrencyDrawer();
                 setInitialSelectedLine();
+                endLoadingScreen();
             }
-        }, 1500);
+        }, 2000);
+
+
+    }
+
+    private void showLoadingScreen() {
+        View loadingScreen = findViewById(R.id.loadingScreen);
+
+        loadingScreen.setVisibility(View.VISIBLE);
     }
 
     private void setupLocationServices() {
@@ -663,8 +671,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupKeypadOnTouchListeners(){
 
-        Log.i("Stuff", "buttons");
-
         GridLayout keypadLayout = findViewById(R.id.keypadLayout);
 
         for (int i = 0; i < keypadLayout.getChildCount(); i++) {
@@ -674,11 +680,15 @@ public class MainActivity extends AppCompatActivity {
             button.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
+
+                    // Using onTouch removes button's onClick -- put enterVal back here
                     if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                        enterVal(button);
                         button.setBackgroundTintList(getResources().getColorStateList(R.color.OffGrey));
                     } else if (event.getAction() == MotionEvent.ACTION_UP) {
                         button.setBackgroundTintList(getResources().getColorStateList(R.color.OffWhite));
                     }
+
                     return true;
                 }
             });
@@ -897,6 +907,19 @@ public class MainActivity extends AppCompatActivity {
         selectedText = (TextView) selectedLinear.getChildAt(0);
         selectedTag = selectedText.getTag().toString();
         selectLine(selectedText);
+    }
+
+    private void endLoadingScreen() {
+        final View loadingScreen = findViewById(R.id.loadingScreen);
+
+        loadingScreen.animate().alpha(0).setDuration(1000);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadingScreen.setVisibility(View.GONE);
+            }
+        }, 1500);
     }
 }
 
