@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     LocationManager locationManager;
     LocationListener locationListener;
     String userCountryName = "Unknown";
+    String userCountryCode = "Unknown";
     Context context = this;
 
     private ArrayList<Currency> setCurrencies;
@@ -577,15 +579,21 @@ public class MainActivity extends AppCompatActivity {
         grandparentLayout = findViewById(R.id.convLines);
 
         setupLocationServices();
-        //setupKeypadOnTouchListeners();
-        setLoadedCurrencies(new FFGIL(), new SWIC(), new ZHR(), new EmptyLine());
-        setThreeDecCurrencies(new HPWC(), new GOTWG());
-        trackEmptyLines();
-        setInitialSelectedLine();
-        configureInfoPane();
-        configureCurrencyDrawer();
-        populateCurrencyLists();
-        populateCurrencyDrawer();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //setupKeypadOnTouchListeners();
+                setLoadedCurrencies(new FFGIL(), new SWIC(), new ZHR(), new EmptyLine());
+                setThreeDecCurrencies(new HPWC(), new GOTWG());
+                trackEmptyLines();
+                configureInfoPane();
+                configureCurrencyDrawer();
+                populateCurrencyLists();
+                populateCurrencyDrawer();
+                setInitialSelectedLine();
+            }
+        }, 1500);
     }
 
     private void setupLocationServices() {
@@ -604,9 +612,12 @@ public class MainActivity extends AppCompatActivity {
                         List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),
                                 location.getLongitude(), 1);
                         userCountryName = addresses.get(0).getCountryName();
-                        Log.i("userCountryName", userCountryName);
+
+                        if(!userCountryName.equals("Unknown")) {
+                            CountryToCodeConverter converter = new CountryToCodeConverter();
+                            userCountryCode = converter.convert(userCountryName);
+                        }
                     } catch (IOException e) {
-                        Log.i("CountryErr", "No country found");
                     }
                     userLocationFound = true;
                }
@@ -623,20 +634,15 @@ public class MainActivity extends AppCompatActivity {
             public void onProviderDisabled(String provider) {}
         };
 
-        Log.i("Here1", "Here1");
-
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED) {
-            Log.i("Here2", "Here2");
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         } else {
-            Log.i("Here3", "Here3");
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-            Log.i("Loc", userCountryName);
         }
     }
 
@@ -680,6 +686,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setLoadedCurrencies(Currency cur0, Currency cur1, Currency cur2, Currency cur3) {
+
         setCurrencies = new ArrayList<>(Arrays.asList(cur0, cur1, cur2, cur3));
 
         ImageView icon = findViewById(R.id.icon0);
@@ -713,14 +720,6 @@ public class MainActivity extends AppCompatActivity {
                 emptyTags.add(i);
             }
         }
-    }
-
-    private void setInitialSelectedLine() {
-        selectedLine = findViewById(R.id.line0);
-        selectedLinear = (LinearLayout) selectedLine.getChildAt(1);
-        selectedText = (TextView) selectedLinear.getChildAt(0);
-        selectedTag = selectedText.getTag().toString();
-        selectLine(selectedText);
     }
 
     private void configureInfoPane() {
@@ -786,6 +785,11 @@ public class MainActivity extends AppCompatActivity {
                             R.drawable.generic_bg
                     );
 
+                    // Changes first currency to user's country (should stick in different method)
+                    if(userCountryCode.equals(key)) {
+                        loadHomeCurrency(key, genericCurrency);
+                    }
+
                     genericCurrencyList.add(genericCurrency);
                     Log.i("main", key);
                     Log.i("main", String.valueOf(jsonChildObject.get(key)));
@@ -805,6 +809,13 @@ public class MainActivity extends AppCompatActivity {
             currencyList.add(currency);
         }
     }
+
+    private void loadHomeCurrency(String key, Currency currency) {
+            setCurrencies.set(0, currency);
+
+            ImageView icon = findViewById(R.id.icon0);
+            icon.setImageResource(setCurrencies.get(0).getIconId());
+        }
 
     private void populateCurrencyDrawer() {
         LinearLayout currencyDrawerLayout = findViewById(R.id.currencyDrawerLayout);
@@ -878,6 +889,14 @@ public class MainActivity extends AppCompatActivity {
             listedCurrencies++;
             currencyDrawerLayout.addView(item);
         }
+    }
+
+    private void setInitialSelectedLine() {
+        selectedLine = findViewById(R.id.line0);
+        selectedLinear = (LinearLayout) selectedLine.getChildAt(1);
+        selectedText = (TextView) selectedLinear.getChildAt(0);
+        selectedTag = selectedText.getTag().toString();
+        selectLine(selectedText);
     }
 }
 
