@@ -1,10 +1,21 @@
 package com.adamdoq.fcconvert;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -23,12 +34,15 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 
@@ -47,6 +61,11 @@ public class MainActivity extends AppCompatActivity {
     GridLayout changeLine;
     ImageView closeDrawerTrigger;
 
+    LocationManager locationManager;
+    LocationListener locationListener;
+    String userCountryName = "Unknown";
+    Context context = this;
+
     private ArrayList<Currency> setCurrencies;
     private ArrayList<Currency> currencyList;
     private ArrayList<Integer> emptyTags;
@@ -54,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean firstSelect = true;
     private boolean newVal = true;
+    private boolean userLocationFound = false;
 
     public void selectLine(View view) {
         // Line is not already selected and not run from onCreate
@@ -554,6 +574,7 @@ public class MainActivity extends AppCompatActivity {
 
         grandparentLayout = findViewById(R.id.convLines);
 
+        setupLocationServices();
         setupKeypadOnTouchListeners();
         setLoadedCurrencies(new FFGIL(), new SWIC(), new ZHR(), new EmptyLine());
         setThreeDecCurrencies(new HPWC(), new GOTWG());
@@ -563,6 +584,65 @@ public class MainActivity extends AppCompatActivity {
         configureCurrencyDrawer();
         populateCurrencyLists();
         populateCurrencyDrawer();
+    }
+
+    private void setupLocationServices() {
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+        locationListener = new LocationListener() {
+
+            @Override
+            public void onLocationChanged(Location location) {
+                if(!userLocationFound) {
+                    Log.i("Here4", "Here4");
+                    Log.i("User Location", location.toString());
+
+                    Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+                    try {
+                        List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),
+                                location.getLongitude(), 1);
+                        userCountryName = addresses.get(0).getCountryName();
+                        Log.i("userCountryName", userCountryName);
+                    } catch (IOException e) {
+                        Log.i("CountryErr", "No country found");
+                    }
+                    userLocationFound = true;
+                }
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+            @Override
+            public void onProviderEnabled(String provider) {
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {}
+        };
+
+        Log.i("Here1", "Here1");
+
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            Log.i("Here2", "Here2");
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        } else {
+            Log.i("Here3", "Here3");
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            }
+        }
     }
 
     private void setupKeypadOnTouchListeners(){
