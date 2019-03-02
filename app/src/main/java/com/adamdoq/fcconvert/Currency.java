@@ -4,12 +4,13 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import static com.adamdoq.fcconvert.MainActivity.USD;
 
-abstract class Currency {
+abstract class Currency implements Serializable {
 
     protected float exchangeRate;
     protected int iconId;

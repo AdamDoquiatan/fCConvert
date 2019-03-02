@@ -2,6 +2,7 @@ package com.adamdoq.fcconvert;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -50,6 +51,7 @@ import java.util.concurrent.ExecutionException;
 public class MainActivity extends AppCompatActivity {
 
     static final float USD = 1;
+    static final Currency[] defaultCurrencies = new Currency[]{new FFGIL(), new ZHR(), new GOTWG(), new EmptyLine()};
 
     GridLayout grandparentLayout;
     GridLayout selectedLine;
@@ -61,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
     ScrollView currencyDrawer;
     GridLayout changeLine;
     ImageView closeDrawerTrigger;
+
+    SharedPreferences saveFile;
 
     LocationManager locationManager;
     LocationListener locationListener;
@@ -570,6 +574,21 @@ public class MainActivity extends AppCompatActivity {
 }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        saveState();
+
+    }
+
+    private void saveState() {
+        try {
+            saveFile.edit().putString("setCurrencies", ObjectSerializer.serialize(setCurrencies)).apply();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -577,31 +596,39 @@ public class MainActivity extends AppCompatActivity {
         grandparentLayout = findViewById(R.id.convLines);
 
         showLoadingScreen();
-        setupKeypadOnTouchListeners();
-        setupLocationServices();
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                setLoadedCurrencies(new FFGIL(), new ZHR(), new GOTWG(), new EmptyLine());
-                setThreeDecCurrencies(new HPWC(), new GOTWG());
-                trackEmptyLines();
-                configureInfoPane();
-                configureCurrencyDrawer();
-                populateCurrencyLists();
-                populateCurrencyDrawer();
-                setInitialSelectedLine();
-                endLoadingScreen();
-            }
-        }, 2000);
+        saveFile = this.getSharedPreferences("package com.adamdoq.fcconvert", Context.MODE_PRIVATE);
 
+        if(saveFile.contains("initialized")) {
+            loadData();
+            createFuncsWithoutDelay();
+        } else {
+            saveFile.edit().putString("initialized", "true").apply();
 
+            setCurrencies = new ArrayList<>(Arrays.asList(defaultCurrencies[0], defaultCurrencies[1],
+                    defaultCurrencies[2], defaultCurrencies[3]));
+
+            setupLocationServices();
+            createFuncsWithDelay();
+        }
     }
 
     private void showLoadingScreen() {
         View loadingScreen = findViewById(R.id.loadingScreen);
 
         loadingScreen.setVisibility(View.VISIBLE);
+    }
+
+    private void loadData() {
+        setCurrencies = new ArrayList<>();
+
+        try{
+            setCurrencies = (ArrayList<Currency>) ObjectSerializer.deserialize
+                    (saveFile.getString("setCurrencies", ObjectSerializer.serialize(new ArrayList<>())));
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     private void setupLocationServices() {
@@ -695,9 +722,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void setLoadedCurrencies(Currency cur0, Currency cur1, Currency cur2, Currency cur3) {
-
-        setCurrencies = new ArrayList<>(Arrays.asList(cur0, cur1, cur2, cur3));
+    private void setLoadedCurrencies() {
 
         ImageView icon = findViewById(R.id.icon0);
         icon.setImageResource(setCurrencies.get(0).getIconId());
@@ -710,6 +735,38 @@ public class MainActivity extends AppCompatActivity {
 
         icon = findViewById(R.id.icon3);
         icon.setImageResource(setCurrencies.get(3).getIconId());
+    }
+
+    private void createFuncsWithoutDelay() {
+        setLoadedCurrencies();
+        setupKeypadOnTouchListeners();
+        setThreeDecCurrencies(new HPWC(), new GOTWG());
+        trackEmptyLines();
+        configureInfoPane();
+        configureCurrencyDrawer();
+        populateCurrencyLists();
+        populateCurrencyDrawer();
+        setInitialSelectedLine();
+        endLoadingScreen();
+    }
+
+    private void createFuncsWithDelay() {
+        setLoadedCurrencies();
+        setupKeypadOnTouchListeners();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setThreeDecCurrencies(new HPWC(), new GOTWG());
+                trackEmptyLines();
+                configureInfoPane();
+                configureCurrencyDrawer();
+                populateCurrencyLists();
+                populateCurrencyDrawer();
+                setInitialSelectedLine();
+                endLoadingScreen();
+            }
+        }, 2000);
     }
 
     private void setThreeDecCurrencies(Currency ...currencies) {
