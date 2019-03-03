@@ -57,7 +57,7 @@
 
     <android.support.v7.widget.GridLayout
         android:id="@+id/convLines"
-        android:layout_width="368dp"
+        android:layout_width="0dp"
         android:layout_height="245dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -88,11 +88,12 @@
                 android:background="@drawable/line_background_transparant"
                 android:onClick="openCurrencyDrawer"
                 android:padding="0dp"
+                app:layout_gravity="top|bottom|left|right"
                 app:srcCompat="@android:color/holo_blue_bright" />
 
             <LinearLayout
                 android:id="@+id/linear0"
-                android:layout_width="277dp"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="2dp"
                 android:layout_marginRight="1dp"
@@ -101,12 +102,14 @@
                 android:orientation="vertical"
                 android:padding="0dp"
                 android:tag="0"
-                android:visibility="visible">
+                android:visibility="visible"
+                app:layout_gravity="top|bottom|left|right">
 
                 <TextView
                     android:id="@+id/lineText0"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
+                    android:layout_gravity="fill"
                     android:gravity="right|center_vertical"
                     android:maxLength="15"
                     android:onClick="selectLine"
@@ -122,6 +125,7 @@
                     android:id="@+id/lineCurName0"
                     android:layout_width="match_parent"
                     android:layout_height="17dp"
+                    android:layout_gravity="fill"
                     android:gravity="right|center_vertical"
                     android:onClick="selectLine"
                     android:paddingRight="15dp"
@@ -156,11 +160,12 @@
                 android:background="@drawable/line_background_transparant"
                 android:onClick="openCurrencyDrawer"
                 android:padding="0dp"
+                app:layout_gravity="top|bottom|left|right"
                 app:srcCompat="@android:color/holo_green_light" />
 
             <LinearLayout
                 android:id="@+id/linear1"
-                android:layout_width="277dp"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="2dp"
                 android:layout_marginRight="1dp"
@@ -169,7 +174,8 @@
                 android:orientation="vertical"
                 android:padding="0dp"
                 android:tag="1"
-                android:visibility="visible">
+                android:visibility="visible"
+                app:layout_gravity="top|bottom|left|right">
 
                 <TextView
                     android:id="@+id/lineText1"
@@ -224,11 +230,12 @@
                 android:background="@drawable/line_background_transparant"
                 android:onClick="openCurrencyDrawer"
                 android:padding="0dp"
+                app:layout_gravity="top|bottom|left|right"
                 app:srcCompat="@android:color/holo_purple" />
 
             <LinearLayout
                 android:id="@+id/linear2"
-                android:layout_width="277dp"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="2dp"
                 android:layout_marginRight="1dp"
@@ -237,7 +244,8 @@
                 android:orientation="vertical"
                 android:padding="0dp"
                 android:tag="2"
-                android:visibility="visible">
+                android:visibility="visible"
+                app:layout_gravity="top|bottom|left|right">
 
                 <TextView
                     android:id="@+id/lineText2"
@@ -292,11 +300,12 @@
                 android:background="@drawable/line_background_transparant"
                 android:onClick="openCurrencyDrawer"
                 android:padding="0dp"
+                app:layout_gravity="top|bottom|left|right"
                 app:srcCompat="@android:color/holo_red_light" />
 
             <LinearLayout
                 android:id="@+id/linear3"
-                android:layout_width="277dp"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="2dp"
                 android:layout_marginRight="1dp"
@@ -305,7 +314,8 @@
                 android:orientation="vertical"
                 android:padding="0dp"
                 android:tag="3"
-                android:visibility="visible">
+                android:visibility="visible"
+                app:layout_gravity="top|bottom|left|right">
 
                 <TextView
                     android:id="@+id/lineText3"
@@ -345,8 +355,8 @@
         android:id="@+id/keypadLayout"
         android:layout_width="300dp"
         android:layout_height="253dp"
-        android:layout_marginStart="80dp"
-        android:layout_marginEnd="5dp"
+        android:layout_marginStart="110dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="5dp"
         app:columnCount="3"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -567,10 +577,10 @@
         android:id="@+id/infoPane"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="75dp"
-        android:layout_marginTop="125dp"
-        android:layout_marginEnd="75dp"
-        android:layout_marginBottom="125dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="3dp"
+        android:layout_marginBottom="3dp"
         android:gravity="center_horizontal|center"
         android:text="THE TEXT"
         android:textColor="@color/OffWhite"

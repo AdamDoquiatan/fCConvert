@@ -798,7 +798,7 @@ public class MainActivity extends AppCompatActivity {
                 setInitialSelectedLine();
                 endLoadingScreen();
             }
-        }, 2000);
+        }, 5000);
     }
 
     private void setThreeDecCurrencies(Currency ...currencies) {
@@ -843,23 +843,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        currencyDrawer.setOnTouchListener(new OnSwipeTouchListener(this) {
-                       public void onSwipeRight() {
-                closeCurrencyDrawer(currencyDrawer);
-            }
-        });
-
         closeDrawerTrigger = findViewById(R.id.closeDrawerTrigger);
         closeDrawerTrigger.setVisibility(View.GONE);
         closeDrawerTrigger.setEnabled(false);
 
         closeDrawerTrigger.setOnTouchListener(new OnSwipeTouchListener(this) {
+
             public void onSwipeRight() {
                 closeCurrencyDrawer(closeDrawerTrigger);
             }
         });
-
-
     }
 
     private void populateCurrencyLists() {
