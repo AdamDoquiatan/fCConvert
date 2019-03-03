@@ -51,6 +51,7 @@ import java.util.concurrent.ExecutionException;
 public class MainActivity extends AppCompatActivity {
 
     static final float USD = 1;
+    static final long TWELVEHOURS = 43200000;
     static final Currency[] defaultCurrencies = new Currency[]{new FFGIL(), new ZHR(), new GOTWG(), new EmptyLine()};
 
     GridLayout grandparentLayout;
@@ -576,8 +577,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
-        saveState();
 
+            long lastUpdateTime;
+
+            try {
+                lastUpdateTime = saveFile.getLong("lastUpdateTime", 0);
+
+                if (lastUpdateTime + TWELVEHOURS < System.currentTimeMillis()) {
+                    saveFile.edit().putLong("lastUpdateTime", System.currentTimeMillis()).apply();
+                    populateGenericCurrencyList();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                saveFile.edit().putLong("lastUpdateTime", System.currentTimeMillis()).apply();
+                populateGenericCurrencyList();
+            }
+        saveState();
     }
 
     private void saveState() {
@@ -603,7 +618,8 @@ public class MainActivity extends AppCompatActivity {
             loadData();
             createFuncsWithoutDelay();
         } else {
-            saveFile.edit().putString("initialized", "true").apply();
+            saveFile.edit().putBoolean("initialized", true).apply();
+            saveFile.edit().putLong("lastUpdateTime", System.currentTimeMillis()).apply();
 
             setCurrencies = new ArrayList<>(Arrays.asList(defaultCurrencies[0], defaultCurrencies[1],
                     defaultCurrencies[2], defaultCurrencies[3]));
@@ -723,18 +739,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setLoadedCurrencies() {
+        try {
+            ImageView icon = findViewById(R.id.icon0);
+            icon.setImageResource(setCurrencies.get(0).getIconId());
 
-        ImageView icon = findViewById(R.id.icon0);
-        icon.setImageResource(setCurrencies.get(0).getIconId());
+            icon = findViewById(R.id.icon1);
+            icon.setImageResource(setCurrencies.get(1).getIconId());
 
-        icon = findViewById(R.id.icon1);
-        icon.setImageResource(setCurrencies.get(1).getIconId());
+            icon = findViewById(R.id.icon2);
+            icon.setImageResource(setCurrencies.get(2).getIconId());
 
-        icon = findViewById(R.id.icon2);
-        icon.setImageResource(setCurrencies.get(2).getIconId());
+            icon = findViewById(R.id.icon3);
+            icon.setImageResource(setCurrencies.get(3).getIconId());
+        } catch(Exception e) {
+            setCurrencies = new ArrayList<>(Arrays.asList(defaultCurrencies[0], defaultCurrencies[1],
+                    defaultCurrencies[2], defaultCurrencies[3]));
 
-        icon = findViewById(R.id.icon3);
-        icon.setImageResource(setCurrencies.get(3).getIconId());
+            ImageView icon = findViewById(R.id.icon0);
+            icon.setImageResource(setCurrencies.get(0).getIconId());
+
+            icon = findViewById(R.id.icon1);
+            icon.setImageResource(setCurrencies.get(1).getIconId());
+
+            icon = findViewById(R.id.icon2);
+            icon.setImageResource(setCurrencies.get(2).getIconId());
+
+            icon = findViewById(R.id.icon3);
+            icon.setImageResource(setCurrencies.get(3).getIconId());
+        }
     }
 
     private void createFuncsWithoutDelay() {
@@ -817,13 +849,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void populateCurrencyLists() {
-        // Populates custom currencies
+        populateCustomCurrencyList();
+        populateGenericCurrencyList();
+    }
+
+    private void populateCustomCurrencyList() {
         currencyList = new ArrayList<>(
                 Arrays.asList(new BC(), new FFGIL(), new GOTWG(), new ZHR(), new HPWC(), new BL(),
                         new SWIC(), new FC(), new EmptyLine())
         );
+    }
 
-        // Populates generic currencies
+    private void populateGenericCurrencyList() {
         DownloadTask task = new DownloadTask();
         ArrayList<Currency> genericCurrencyList = new ArrayList<>();
 
