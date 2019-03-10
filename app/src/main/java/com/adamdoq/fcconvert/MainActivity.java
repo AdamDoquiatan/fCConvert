@@ -828,7 +828,19 @@ public class MainActivity extends AppCompatActivity {
 
         TextView infoPane = findViewById(R.id.infoPane);
         infoPane.setBackgroundResource(R.drawable.infopane_background);
-        infoPane.setText("Don't sue me!");
+        infoPane.setSingleLine(false);
+        infoPane.setText("SOME IMAGES AND ICONS FROM:\n\n\n" +
+                "pexels.com/photo/photo-of-brown-concrete-buildings-1006094/ \n\n" +
+                "flaticon.com/free-icon/dragon_477110\n\n" +
+                "flaticon.com/free-icon/pouch_1071207#term=pouch&page=1&position=40\n\n" +
+                "flaticon.com/packs/flags-collection\n\n" +
+                "kisspng.com/png-united-federation-of-planets-starfleet-star-trek-l-2006809/\n\n" +
+                "pexels.com/photo/sky-space-milky-way-stars-110854/\n\n" +
+                "pexels.com/photo/abstract-art-artificial-artistic-131634/\n\n" +
+                "pexels.com/photo/daylight-environment-forest-green-462044/\n\n" +
+                "pexels.com/photo/adventure-clouds-countryside-daylight-323606/\n\n" +
+                "pexels.com/photo/milky-way-galaxy-during-nighttime-1252890/\n\n" +
+                "pexels.com/photo/black-and-white-painted-wall-room-1224859/");
         infoPane.setVisibility(View.GONE);
     }
 
@@ -871,45 +883,19 @@ public class MainActivity extends AppCompatActivity {
         DownloadTask task = new DownloadTask();
         ArrayList<Currency> genericCurrencyList = new ArrayList<>();
 
+        String json;
+
         try {
-            String json = task.execute("https://api.exchangeratesapi.io/latest?base=USD").get();
+            json = task.execute("https://api.exchangeratesapi.io/latest?base=USD").get();
             Log.i("json", json);
+        } catch (Exception e) {
+            json = "{\"rates\":{\"MXN\":19.3502690306,\"AUD\":1.4104260386,\"HKD\":7.8491664461,\"RON\":4.1820587457,\"HRK\":6.5559671871,\"CHF\":1.0013231013,\"IDR\":14129.9991179324,\"CAD\":1.3312163712,\"USD\":1.0,\"JPY\":111.9431948487,\"BRL\":3.7747199435,\"PHP\":51.800299903,\"CZK\":22.5994531181,\"NOK\":8.6118902708,\"INR\":70.8855958366,\"PLN\":3.7919202611,\"ISK\":120.1376025404,\"MYR\":4.0755049837,\"ZAR\":14.242127547,\"ILS\":3.6254741113,\"GBP\":0.7565934551,\"SGD\":1.3549439887,\"HUF\":278.5922201641,\"EUR\":0.8820675664,\"CNY\":6.7023904031,\"TRY\":5.3826409103,\"SEK\":9.3096057158,\"RUB\":65.7524036341,\"NZD\":1.4695245656,\"KRW\":1126.1180206404,\"THB\":31.8796859839,\"BGN\":1.7251477463,\"DKK\":6.5816353533},\"base\":\"USD\",\"date\":\"2019-03-04\"}";
+            Log.i("json", json);
+        }
 
-            JSONObject jsonObject = new JSONObject(json);
-            JSONObject jsonChildObject = (JSONObject) jsonObject.get("rates");
-            Iterator<String> iterator = jsonChildObject.keys();
 
-            while (iterator.hasNext()) {
-                String key = iterator.next();
-
-                ArrayList<?> arr = new ArrayList<>();
-
-                arr = buildGenericIcon(key, arr);
-
-                if(arr.size() == 2) {
-
-                    GenericCurrency genericCurrency = new GenericCurrency(
-                            Float.parseFloat(String.valueOf(jsonChildObject.get(key))),
-                            (Integer) arr.get(0),
-                            (String) arr.get(1),
-                            key + " - " + arr.get(1),
-                            R.drawable.generic_bg
-                    );
-
-                    // Changes first currency to user's country (should stick in different method)
-                    if(userCountryCode.equals(key)) {
-                        loadHomeCurrency(key, genericCurrency);
-                    }
-
-                    genericCurrencyList.add(genericCurrency);
-                    Log.i("main", key);
-                    Log.i("main", String.valueOf(jsonChildObject.get(key)));
-                }
-            }
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        try {
+            processJSON(json, genericCurrencyList);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -918,6 +904,40 @@ public class MainActivity extends AppCompatActivity {
 
         for (Currency currency : genericCurrencyList) {
             currencyList.add(currency);
+        }
+    }
+
+    private void processJSON(String json, ArrayList<Currency> genericCurrencyList) throws JSONException {
+        JSONObject jsonObject = new JSONObject(json);
+        JSONObject jsonChildObject = (JSONObject) jsonObject.get("rates");
+        Iterator<String> iterator = jsonChildObject.keys();
+
+        while (iterator.hasNext()) {
+            String key = iterator.next();
+
+            ArrayList<?> arr = new ArrayList<>();
+
+            arr = buildGenericIcon(key, arr);
+
+            if(arr.size() == 2) {
+
+                GenericCurrency genericCurrency = new GenericCurrency(
+                        Float.parseFloat(String.valueOf(jsonChildObject.get(key))),
+                        (Integer) arr.get(0),
+                        (String) arr.get(1),
+                        key + " - " + arr.get(1),
+                        R.drawable.generic_bg
+                );
+
+                // Changes first currency to user's country (should stick in different method)
+                if(userCountryCode.equals(key)) {
+                    loadHomeCurrency(key, genericCurrency);
+                }
+
+                genericCurrencyList.add(genericCurrency);
+                Log.i("main", key);
+                Log.i("main", String.valueOf(jsonChildObject.get(key)));
+            }
         }
     }
 
