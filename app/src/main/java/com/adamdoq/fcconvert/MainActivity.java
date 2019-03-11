@@ -829,7 +829,7 @@ public class MainActivity extends AppCompatActivity {
         TextView infoPane = findViewById(R.id.infoPane);
         infoPane.setBackgroundResource(R.drawable.infopane_background);
         infoPane.setSingleLine(false);
-        infoPane.setText("SOME IMAGES AND ICONS FROM:\n\n\n" +
+        infoPane.setText("RESOURCES PILFERED FROM:\n\n\n" +
                 "pexels.com/photo/photo-of-brown-concrete-buildings-1006094/ \n\n" +
                 "flaticon.com/free-icon/dragon_477110\n\n" +
                 "flaticon.com/free-icon/pouch_1071207#term=pouch&page=1&position=40\n\n" +
